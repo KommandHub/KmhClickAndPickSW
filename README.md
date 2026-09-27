@@ -6,7 +6,7 @@
 
 # Click and Pick for Shopware 6 — Technical Documentation
 
-`KommandhubClickAndPickSW` adds click-and-collect to Shopware 6.7: a self-pickup
+`KmhClickAndPickSW` adds click-and-collect to Shopware 6.7: a self-pickup
 shipping method, a pay-on-pickup payment method, pickup-location management with a
 timezone-aware opening schedule, in-checkout selection of a pickup location + date/
 time, server-side validation, a pickup-ready order-delivery state, and Flow Builder
@@ -16,7 +16,7 @@ This document targets developers who maintain, test, or extend the plugin. It is
 not a merchant/end-user guide.
 
 - **Namespace:** `Kommandhub\ClickAndPickSW\` → `src/` (PSR-4)
-- **Plugin class:** `Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW`
+- **Plugin class:** `Kommandhub\ClickAndPickSW\KmhClickAndPickSW`
 - **Shopware:** `~6.7.0` (`shopware/core`, `shopware/storefront`)
 - **License:** Proprietary (see `LICENSE`)
 
@@ -29,11 +29,11 @@ Implemented, and only this:
 - Pickup-location entity + admin module (address/contact/geo, sales-channel
   assignment, per-location IANA timezone, weekly opening intervals, special-date
   overrides).
-- `kommandhub_self_pickup` shipping method and `kommandhub_pay_on_pickup` payment
+- `kmh_self_pickup` shipping method and `kmh_pay_on_pickup` payment
   method (payment restricted to the pickup shipping context).
 - In-checkout pickup-location + pickup date/time + free-text comment selection,
   persisted in the sales-channel context and validated in the cart.
-- Order pickup record entity (`kommandhub_order_pickup_location`) as the single
+- Order pickup record entity (`kmh_order_pickup_location`) as the single
   source of truth for an order's pickup data; a OneToOne order extension.
 - a pickup-ready order-delivery state (technical name `ready`, added to the
   `order_delivery.state` machine); mail templates; `pickup.order.placed`
@@ -111,16 +111,16 @@ tests/
 
 | Table | Entity | Notes |
 |-------|--------|-------|
-| `kommandhub_pickup_location` | `PickupLocationDefinition` | address/contact/geo, `time_format`, `timezone`, `active`, `location_code`. Index on `active`. |
-| `kommandhub_pickup_location_sales_channel` | `…SalesChannelMappingDefinition` | M2M mapping. PK `(pickup_location_id, sales_channel_id)`; FK to `sales_channel` auto-indexes the reverse direction. |
-| `kommandhub_pickup_location_opening_hour` | `…OpeningHourDefinition` | weekly intervals: `day_of_week` (ISO 1–7), `open_time`/`close_time` (`HH:MM`). Index `(pickup_location_id, day_of_week)`. |
-| `kommandhub_pickup_location_special_hour` | `…SpecialHourDefinition` | date overrides: `date`, `closed`, optional `open_time`/`close_time`. Index `(pickup_location_id, date)`. |
-| `kommandhub_order_pickup_location` | `OrderPickupLocationDefinition` | one row per pickup order: `order_id`+`order_version_id`, nullable `pickup_location_id`, `pickup_time`, `comment`. |
+| `kmh_pickup_location` | `PickupLocationDefinition` | address/contact/geo, `time_format`, `timezone`, `active`, `location_code`. Index on `active`. |
+| `kmh_pickup_location_sales_channel` | `…SalesChannelMappingDefinition` | M2M mapping. PK `(pickup_location_id, sales_channel_id)`; FK to `sales_channel` auto-indexes the reverse direction. |
+| `kmh_pickup_location_opening_hour` | `…OpeningHourDefinition` | weekly intervals: `day_of_week` (ISO 1–7), `open_time`/`close_time` (`HH:MM`). Index `(pickup_location_id, day_of_week)`. |
+| `kmh_pickup_location_special_hour` | `…SpecialHourDefinition` | date overrides: `date`, `closed`, optional `open_time`/`close_time`. Index `(pickup_location_id, date)`. |
+| `kmh_order_pickup_location` | `OrderPickupLocationDefinition` | one row per pickup order: `order_id`+`order_version_id`, nullable `pickup_location_id`, `pickup_time`, `comment`. |
 
 **Associations**
 - `PickupLocation.salesChannels` — M2M to `sales_channel` via the mapping table.
 - `PickupLocation.openingHoursSchedule` / `.specialHours` — OneToMany, `CascadeDelete`.
-- `OrderExtension` adds `order.kommandhubPickupLocation` — **OneToOne, autoloaded**,
+- `OrderExtension` adds `order.kmhPickupLocation` — **OneToOne, autoloaded**,
   `CascadeDelete`. Every order read (finish page, account, admin API, Flow order
   data) carries the pickup record without a criteria subscriber.
 - `OrderPickupLocation.pickupLocation` — ManyToOne, autoloaded.
@@ -168,7 +168,7 @@ customers or sales channels. Keys are centralized in `PickupContextKeys`.
 
 **Order placement** — `OrderListener` on `CheckoutOrderPlacedEvent`
 - For pickup orders: `OrderPickupLocationWriter` creates the
-  `kommandhub_order_pickup_location` row; `PickupOrderPlacedEvent` is dispatched;
+  `kmh_order_pickup_location` row; `PickupOrderPlacedEvent` is dispatched;
   the context selection is then cleared so a new cart in the same session starts
   clean.
 
@@ -206,7 +206,7 @@ ISO-8601 value the storefront submits, parsed back by the resolver).
   `<select name="pickupTime">`, and a `<textarea name="pickupComment">`. Selection
   reaches the context via the core shipping-form auto-submit (context switch).
 - The finish page (`page/checkout/finish/finish-address.html.twig`) renders the
-  pickup card from `order.extensions.kommandhubPickupLocation`.
+  pickup card from `order.extensions.kmhPickupLocation`.
 - JS plugins (`app/storefront/src/`): `SalesChannelPickupLocation` fetches the
   location option list; `SalesChannelPickupTime` fetches time-slot options for the
   chosen date and keeps the date helper from auto-submitting the form.
@@ -220,15 +220,15 @@ ISO-8601 value the storefront submits, parsed back by the resolver).
 
 ## 8. Administration integration
 
-- Module `kommandhub-pickup-location` (under **Content**): list + create/edit,
+- Module `kmh-pickup-location` (under **Content**): list + create/edit,
   sales-channel assignment, and a schedule editor
-  (`kommandhub-pickup-location-schedule`) for timezone + weekly intervals + special
+  (`kmh-pickup-location-schedule`) for timezone + weekly intervals + special
   dates.
-- Order detail tab `kommandhub-order-pickup-info`: the child route
+- Order detail tab `kmh-order-pickup-info`: the child route
   `sw.order.detail.pickup` is injected into the core `sw.order.detail` route via a
   lightweight module `routeMiddleware`, and the tab item is added by overriding the
   `sw-order-detail` template's `sw_order_detail_content_tabs_extension` block. The
-  tab component loads the `kommandhub_order_pickup_location` record by `orderId`
+  tab component loads the `kmh_order_pickup_location` record by `orderId`
   (`pickupLocation` association) and renders a read-only, deleted-location-aware
   view (`pickup-view.js` derives the display state).
 
@@ -253,11 +253,11 @@ lazily reload the entity, so delayed flows stay small. `pickupOrderLocation` exp
 `pickupTime`/`comment` (and the linked location) as first-class flow variables.
 
 Actions (`flow.action`, declared explicitly in `services.yml`):
-- `action.kommandhub.pickup.notify_admin` — `SendPickupNotificationToAdminAction`:
+- `action.kmh.pickup.notify_admin` — `SendPickupNotificationToAdminAction`:
   emails the order's pickup location (recipient = location email). Requires
   `OrderAware` + `PickupLocationAware`; `pickupOrderLocation` is optional template
   data. Template id comes from the action config or the plugin's seeded default.
-- `action.kommandhub.pickup.notify_sms` — `SendSmsToPickupLocationAction`: texts the
+- `action.kmh.pickup.notify_sms` — `SendSmsToPickupLocationAction`: texts the
   location's phone number; appends the pickup time when present.
 
 ## 10. Email & optional SMS
@@ -275,7 +275,7 @@ Actions (`flow.action`, declared explicitly in `services.yml`):
 ## 11. Configuration
 
 `src/Resources/config/config.xml` — three booleans, consumed only in storefront
-Twig via `config('KommandhubClickAndPickSW.config.<key>')`:
+Twig via `config('KmhClickAndPickSW.config.<key>')`:
 
 | Key | Default | Effect |
 |-----|---------|--------|
@@ -313,7 +313,7 @@ registry, or the Git repository as a VCS source, to your project's
 
 ```jsonc
 "repositories": [
-  { "type": "vcs", "url": "git@github.com:KommandHub/KommandhubClickAndPickSW.git" }
+  { "type": "vcs", "url": "git@github.com:KommandHub/KmhClickAndPickSW.git" }
 ]
 ```
 
@@ -322,7 +322,7 @@ Then require and enable it from the Shopware project root:
 ```bash
 composer require kommandhub/click-and-pick-sw
 bin/console plugin:refresh
-bin/console plugin:install --activate KommandhubClickAndPickSW
+bin/console plugin:install --activate KmhClickAndPickSW
 bin/console cache:clear
 ```
 
@@ -331,18 +331,18 @@ Update an installed copy:
 ```bash
 composer update kommandhub/click-and-pick-sw
 bin/console plugin:refresh
-bin/console plugin:update KommandhubClickAndPickSW
+bin/console plugin:update KmhClickAndPickSW
 bin/console cache:clear
 ```
 
 Without registry/VCS access, install from a release archive by unpacking it into
-`custom/plugins/KommandhubClickAndPickSW`, then run the same `plugin:refresh` /
+`custom/plugins/KmhClickAndPickSW`, then run the same `plugin:refresh` /
 `plugin:install --activate` commands. Rebuild assets afterwards when needed
 (`bin/build-administration.sh && bin/build-storefront.sh`).
 
 ### Lifecycle
 
-Install/activate lifecycle (`KommandhubClickAndPickSW`):
+Install/activate lifecycle (`KmhClickAndPickSW`):
 
 - `install` / `update` → run the payment + shipping installers (idempotent).
 - `activate` / `deactivate` → activate/deactivate the payment + shipping methods.
@@ -390,15 +390,15 @@ Orders are never deleted.
 ## 16. Error handling, logging & debugging
 
 - Cart problems surface as blocking `Error`s (see §5) with message keys under
-  `checkout.kommandhub-click-and-pick.*` / `error.…`.
+  `checkout.kmh-click-and-pick.*` / `error.…`.
 - An invalid/foreign/inactive location selection throws a
   `ConstraintViolationException` at the context switch (aborts the switch).
 - Flow actions inject a PSR `logger` and log-and-swallow provider failures (missing
   template, mail/SMS send errors) so a flow run is not aborted by a notification.
 - Debugging tips: the selection is in `sales_channel_api_context.payload`
   (`pickupLocationId`/`pickupTime`/`pickupComment`); the resolved selection is what
-  the cart validator sees; the order record is in `kommandhub_order_pickup_location`
-  and on `order.extensions.kommandhubPickupLocation`.
+  the cart validator sees; the order record is in `kmh_order_pickup_location`
+  and on `order.extensions.kmhPickupLocation`.
 
 ## 17. Local development
 

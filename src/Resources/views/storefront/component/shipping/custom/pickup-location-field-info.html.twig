@@ -128,7 +128,7 @@
                         <div class="pickup-location-card__meta">
                             {% block pickup_location_field_info_address_section %}
                                 <div class="pickup-location-card__row">
-                                    <span class="pickup-location-card__label">{{ "general.kommandhub-click-and-pick.locationInfoFields.address" | trans }}:</span>
+                                    <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.address" | trans }}:</span>
                                     <span>{{ location.street }}, {% if location.postalCode %}{{ location.postalCode }} {% endif %}{{ location.city }}</span>
                                 </div>
                             {% endblock %}
@@ -141,7 +141,7 @@
                                     {% set intervals = openingHours|filter(interval => interval.dayOfWeek == dayOfWeek) %}
                                     {% if intervals|length > 0 %}
                                         <div class="pickup-location-card__row">
-                                            <span class="pickup-location-card__label">{{ ("general.kommandhub-click-and-pick.daysOfWeek." ~ dayKey) | trans }}:</span>
+                                            <span class="pickup-location-card__label">{{ ("general.kmh-click-and-pick.daysOfWeek." ~ dayKey) | trans }}:</span>
                                             <span>{% for interval in intervals %}{{ interval.openTime }}–{{ interval.closeTime }}{% if not loop.last %}, {% endif %}{% endfor %}</span>
                                         </div>
                                     {% endif %}
@@ -151,7 +151,7 @@
                                 {% for special in specialHours %}
                                     <div class="pickup-location-card__row">
                                         <span class="pickup-location-card__label">{{ special.date|date('Y-m-d') }}:</span>
-                                        <span>{% if special.closed %}{{ "general.kommandhub-click-and-pick.locationInfoFields.closed" | trans }}{% else %}{{ special.openTime }}–{{ special.closeTime }}{% endif %}</span>
+                                        <span>{% if special.closed %}{{ "general.kmh-click-and-pick.locationInfoFields.closed" | trans }}{% else %}{{ special.openTime }}–{{ special.closeTime }}{% endif %}</span>
                                     </div>
                                 {% endfor %}
                             {% endblock %}
@@ -161,29 +161,29 @@
                                 {% set pickupComment = pickupComment ?? null %}
                                 {% if pickupTime %}
                                     <div class="pickup-location-card__row">
-                                        <span class="pickup-location-card__label">{{ "general.kommandhub-click-and-pick.locationInfoFields.pickupTime" | trans }}:</span>
+                                        <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.pickupTime" | trans }}:</span>
                                         <span>{{ pickupTime|format_datetime('medium', 'short', locale=app.request.locale) }}</span>
                                     </div>
                                 {% endif %}
                                 {% if pickupComment %}
                                     <div class="pickup-location-card__row">
-                                        <span class="pickup-location-card__label">{{ "general.kommandhub-click-and-pick.locationInfoFields.pickupComment" | trans }}:</span>
+                                        <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.pickupComment" | trans }}:</span>
                                         <span>{{ pickupComment }}</span>
                                     </div>
                                 {% endif %}
                             {% endblock %}
 
                             {% block pickup_location_field_info_contact_section %}
-                                {% if config('KommandhubClickAndPickSW.config.showContactDetailInPickupLocationInfo') %}
+                                {% if config('KmhClickAndPickSW.config.showContactDetailInPickupLocationInfo') %}
                                     {% if location.phoneNumber %}
                                         <div class="pickup-location-card__row">
-                                            <span class="pickup-location-card__label">{{ "general.kommandhub-click-and-pick.locationInfoFields.phone" | trans }}:</span>
+                                            <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.phone" | trans }}:</span>
                                             <span>{{ location.phoneNumber }}</span>
                                         </div>
                                     {% endif %}
                                     {% if location.email %}
                                         <div class="pickup-location-card__row">
-                                            <span class="pickup-location-card__label">{{ "general.kommandhub-click-and-pick.locationInfoFields.email" | trans }}:</span>
+                                            <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.email" | trans }}:</span>
                                             <span>{{ location.email }}</span>
                                         </div>
                                     {% endif %}

@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('shopware.entity.definition', ['entity' => PickupLocationDefinition::ENTITY_NAME])]
 class PickupLocationDefinition extends EntityDefinition
 {
-    final public const ENTITY_NAME = 'kommandhub_pickup_location';
+    final public const ENTITY_NAME = 'kmh_pickup_location';
 
     public function getEntityName(): string
     {

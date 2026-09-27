@@ -8,7 +8,7 @@ use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupSelection;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationSelectionResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -50,7 +50,7 @@ class PickupLocationSelectionResolverTest extends TestCase
     public function testDetectsPickupShippingMethodByConfiguredId(): void
     {
         static::assertTrue($this->resolver->isPickupShippingMethod(
-            $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID))
+            $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID))
         ));
         static::assertFalse($this->resolver->isPickupShippingMethod(
             $this->salesChannelContext($this->shippingMethod('different-shipping-id'))
@@ -59,7 +59,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolvesValidPickupLocationFromStoredSelection(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->with($context)
             ->willReturn(new StoredPickupSelection(self::LOCATION_ID));
 
@@ -99,7 +99,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveReturnsNullWhenNothingStored(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(new StoredPickupSelection());
 
         $this->pickupLocationRepository->expects(static::never())->method('search');
@@ -109,7 +109,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveReturnsNullWhenStoredLocationNoLongerResolves(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(new StoredPickupSelection(self::LOCATION_ID));
 
         $this->pickupLocationRepository
@@ -122,7 +122,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveSelectionReturnsLocationTimeAndComment(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(
             new StoredPickupSelection(self::LOCATION_ID, '2024-06-03T10:00:00+01:00', 'Ring the bell')
         );
@@ -142,7 +142,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveSelectionWithoutChosenTimeReturnsNullPickupTime(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(new StoredPickupSelection(self::LOCATION_ID));
 
         $pickupLocation = new PickupLocationEntity();
@@ -158,7 +158,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveSelectionIgnoresUnparseablePickupTime(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(
             new StoredPickupSelection(self::LOCATION_ID, 'not-a-date', null)
         );
@@ -176,7 +176,7 @@ class PickupLocationSelectionResolverTest extends TestCase
 
     public function testResolveSelectionReturnsNullWhenNoLocation(): void
     {
-        $context = $this->salesChannelContext($this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID));
+        $context = $this->salesChannelContext($this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID));
         $this->pickupContextStorage->method('load')->willReturn(new StoredPickupSelection());
 
         static::assertNull($this->resolver->resolveSelection($context));

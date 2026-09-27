@@ -37,7 +37,7 @@ class SendSmsToPickupLocationActionTest extends TestCase
     {
         $action = new SendSmsToPickupLocationAction($this->logger, $this->createMock(SmsGateway::class));
 
-        static::assertSame('action.kommandhub.pickup.notify_sms', SendSmsToPickupLocationAction::getName());
+        static::assertSame('action.kmh.pickup.notify_sms', SendSmsToPickupLocationAction::getName());
         static::assertSame([OrderAware::class, PickupLocationAware::class], $action->requirements());
     }
 

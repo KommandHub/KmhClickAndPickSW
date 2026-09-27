@@ -36,7 +36,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
  */
 class SendPickupNotificationToAdminAction extends FlowAction implements DelayableAction
 {
-    public const ACTION_NAME = 'action.kommandhub.pickup.notify_admin';
+    public const ACTION_NAME = 'action.kmh.pickup.notify_admin';
 
     public function __construct(
         private readonly AbstractMailService $mailService,

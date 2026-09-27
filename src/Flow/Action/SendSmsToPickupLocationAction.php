@@ -28,7 +28,7 @@ use Shopware\Core\Framework\Event\OrderAware;
  */
 class SendSmsToPickupLocationAction extends FlowAction implements DelayableAction
 {
-    public const ACTION_NAME = 'action.kommandhub.pickup.notify_sms';
+    public const ACTION_NAME = 'action.kmh.pickup.notify_sms';
 
     public function __construct(
         private readonly LoggerInterface $logger,

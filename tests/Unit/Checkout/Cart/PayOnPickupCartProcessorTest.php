@@ -16,7 +16,7 @@ use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationOpeningHour\PickupLocationOpeningHourCollection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationOpeningHour\PickupLocationOpeningHourEntity;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupLocationAvailabilityService;
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupTimeSlotService;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationSelectionResolver;
@@ -145,7 +145,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         $this->storeSelection(self::LOCATION_ID);
 
@@ -198,7 +198,7 @@ class PayOnPickupCartProcessorTest extends TestCase
             $errors,
             $this->salesChannelContext(
                 $this->paymentMethod('App\\OtherPaymentHandler'),
-                $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+                $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
             )
         );
 
@@ -211,7 +211,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod('App\\OtherPaymentHandler'),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // Persisted, but the location no longer resolves (deactivated / removed).
         $this->storeSelection(self::LOCATION_ID);
@@ -239,7 +239,7 @@ class PayOnPickupCartProcessorTest extends TestCase
     {
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         static::assertNull($context->getExtension(PickupContextKeys::EXTENSION));
 
@@ -263,7 +263,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // A time is chosen, but the location has no opening hours covering it.
         $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');
@@ -283,7 +283,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // Monday 10:00 UTC, inside Monday 09:00–17:00.
         $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');

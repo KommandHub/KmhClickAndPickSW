@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kommandhub\ClickAndPickSW\Installer;
 
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,7 +19,7 @@ use Shopware\Core\System\DeliveryTime\DeliveryTimeEntity;
  */
 readonly class ShippingMethodInstaller
 {
-    public const TECHNICAL_NAME = 'kommandhub_self_pickup';
+    public const TECHNICAL_NAME = 'kmh_self_pickup';
 
     private const DELIVERY_TIME_ID = '2dcbf55b7c2a65548e8c3e7ea821f1b4';
 
@@ -43,7 +43,7 @@ readonly class ShippingMethodInstaller
 
         $this->shippingMethodRepository->create([
             [
-                'id' => KommandhubClickAndPickSW::SHIPPING_METHOD_ID,
+                'id' => KmhClickAndPickSW::SHIPPING_METHOD_ID,
                 'active' => true,
                 'technicalName' => self::TECHNICAL_NAME,
                 'name' => 'Self pick-up',
@@ -86,7 +86,7 @@ readonly class ShippingMethodInstaller
 
         $this->shippingMethodRepository->update([
             [
-                'id' => KommandhubClickAndPickSW::SHIPPING_METHOD_ID,
+                'id' => KmhClickAndPickSW::SHIPPING_METHOD_ID,
                 'active' => $active,
             ],
         ], $context);
@@ -95,7 +95,7 @@ readonly class ShippingMethodInstaller
     private function shippingMethodExists(Context $context): bool
     {
         return $this->shippingMethodRepository
-            ->searchIds(new Criteria([KommandhubClickAndPickSW::SHIPPING_METHOD_ID]), $context)
+            ->searchIds(new Criteria([KmhClickAndPickSW::SHIPPING_METHOD_ID]), $context)
             ->firstId() !== null;
     }
 

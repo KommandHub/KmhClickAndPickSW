@@ -130,7 +130,7 @@ class PickupOrderReadyListenerTest extends TestCase
         $pickup->setId('11111111111111111111111111111111');
         $pickup->setOrderId(self::ORDER_ID);
         $pickup->setPickupLocation($location);
-        $order->addExtension('kommandhubPickupLocation', $pickup);
+        $order->addExtension('kmhPickupLocation', $pickup);
 
         return $order;
     }

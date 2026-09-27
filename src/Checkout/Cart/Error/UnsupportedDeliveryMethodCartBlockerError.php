@@ -8,7 +8,7 @@ use Shopware\Core\Checkout\Cart\Error\Error;
 
 class UnsupportedDeliveryMethodCartBlockerError extends Error
 {
-    private const KEY = 'kommandhub-click-and-pick.unsupportedDeliveryMethod';
+    private const KEY = 'kmh-click-and-pick.unsupportedDeliveryMethod';
 
     public function __construct(protected readonly string $deliveryMethodName)
     {

@@ -62,7 +62,7 @@ class SendPickupNotificationToAdminActionTest extends TestCase
 
     public function testActionMetadata(): void
     {
-        static::assertSame('action.kommandhub.pickup.notify_admin', SendPickupNotificationToAdminAction::getName());
+        static::assertSame('action.kmh.pickup.notify_admin', SendPickupNotificationToAdminAction::getName());
         static::assertSame([OrderAware::class, PickupLocationAware::class], $this->action->requirements());
     }
 

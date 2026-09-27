@@ -6,7 +6,7 @@ namespace Kommandhub\ClickAndPickSW\Tests\Unit\Installer;
 
 use Kommandhub\ClickAndPickSW\Checkout\Payment\PayOnPickupPaymentHandler;
 use Kommandhub\ClickAndPickSW\Installer\PaymentMethodInstaller;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -53,7 +53,7 @@ class PaymentMethodInstallerTest extends TestCase
         $this->paymentMethodRepository->expects(static::never())->method('create');
         $this->pluginIdProvider->expects(static::never())->method('getPluginIdByBaseClass');
 
-        $this->installer->install(KommandhubClickAndPickSW::class, $this->context);
+        $this->installer->install(KmhClickAndPickSW::class, $this->context);
     }
 
     public function testInstallFallsBackToHandlerLookupBeforeCreating(): void
@@ -75,7 +75,7 @@ class PaymentMethodInstallerTest extends TestCase
         $this->paymentMethodRepository->expects(static::never())->method('create');
         $this->pluginIdProvider->expects(static::never())->method('getPluginIdByBaseClass');
 
-        $this->installer->install(KommandhubClickAndPickSW::class, $this->context);
+        $this->installer->install(KmhClickAndPickSW::class, $this->context);
     }
 
     public function testInstallCreatesPaymentMethodWhenMissing(): void
@@ -90,7 +90,7 @@ class PaymentMethodInstallerTest extends TestCase
         $this->pluginIdProvider
             ->expects(static::once())
             ->method('getPluginIdByBaseClass')
-            ->with(KommandhubClickAndPickSW::class, $this->context)
+            ->with(KmhClickAndPickSW::class, $this->context)
             ->willReturn('plugin-id');
         $this->paymentMethodRepository
             ->expects(static::once())
@@ -107,12 +107,12 @@ class PaymentMethodInstallerTest extends TestCase
                         && $payment['availabilityRule']['id'] === PaymentMethodInstaller::AVAILABILITY_RULE_ID
                         && $condition['type'] === ShippingMethodRule::RULE_NAME
                         && $condition['value']['operator'] === Rule::OPERATOR_EQ
-                        && $condition['value']['shippingMethodIds'] === [KommandhubClickAndPickSW::SHIPPING_METHOD_ID];
+                        && $condition['value']['shippingMethodIds'] === [KmhClickAndPickSW::SHIPPING_METHOD_ID];
                 }),
                 $this->context
             );
 
-        $this->installer->install(KommandhubClickAndPickSW::class, $this->context);
+        $this->installer->install(KmhClickAndPickSW::class, $this->context);
     }
 
     public function testActivateUpdatesExistingPaymentMethod(): void

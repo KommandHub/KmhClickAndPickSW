@@ -13,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
 
 /**
- * Adds the OneToOne `kommandhubPickupLocation` association to the order, linking
+ * Adds the OneToOne `kmhPickupLocation` association to the order, linking
  * it to its {@see OrderPickupLocationDefinition} record. Autoloaded, so every
  * order read (finish page, account, admin API, Flow mail) carries the pickup
  * record without a per-read criteria subscriber. Deleting the order cascades to
@@ -31,7 +31,7 @@ class OrderExtension extends EntityExtension
     {
         $collection->add(
             (new OneToOneAssociationField(
-                'kommandhubPickupLocation',
+                'kmhPickupLocation',
                 'id',
                 'order_id',
                 OrderPickupLocationDefinition::class,

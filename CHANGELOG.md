@@ -17,10 +17,10 @@ before 1.0.0.
 ## Payment & shipping
 - `Pay on pickup` payment method (installed on activate), restricted to the
   `Self pick-up` shipping context.
-- `Self pick-up` shipping method (technical name `kommandhub_self_pickup`).
+- `Self pick-up` shipping method (technical name `kmh_self_pickup`).
 
 ## Pickup data model
-- Dedicated `kommandhub_order_pickup_location` entity stores each order's pickup
+- Dedicated `kmh_order_pickup_location` entity stores each order's pickup
   location, chosen time and instructions — a OneToOne order extension and the
   single source of truth (replaces the previous order custom field).
 - Deleting a pickup location nulls the reference (`ON DELETE SET NULL`) and keeps

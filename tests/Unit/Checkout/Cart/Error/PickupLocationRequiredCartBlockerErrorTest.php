@@ -16,8 +16,8 @@ class PickupLocationRequiredCartBlockerErrorTest extends TestCase
     {
         $error = new PickupLocationRequiredCartBlockerError();
 
-        static::assertSame('kommandhub-click-and-pick.pickupLocationRequired', $error->getId());
-        static::assertSame('kommandhub-click-and-pick.pickupLocationRequired', $error->getMessageKey());
+        static::assertSame('kmh-click-and-pick.pickupLocationRequired', $error->getId());
+        static::assertSame('kmh-click-and-pick.pickupLocationRequired', $error->getMessageKey());
         static::assertSame(Error::LEVEL_ERROR, $error->getLevel());
         static::assertTrue($error->blockOrder());
         static::assertSame([], $error->getParameters());

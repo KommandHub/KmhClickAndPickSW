@@ -1,4 +1,4 @@
-# KommandhubClickAndPickSW
+# KmhClickAndPickSW
 
 Shopware 6 click-and-collect plugin: pickup-location selection in checkout, a
 `Self pick-up` shipping method and a `Pay on pickup` payment method, plus a
@@ -32,7 +32,7 @@ top-level directory *is* a boundary; inside it, flat Symfony-idiomatic folders
 (`Service`, `Listener`, `Controller`, `Event`, `Error`, `Twig`). One obvious
 home per class.
 
-- `Entity/PickupLocation/` — the `kommandhub_pickup_location` DAL entity
+- `Entity/PickupLocation/` — the `kmh_pickup_location` DAL entity
   (definition/entity/collection), its `Aggregate/…SalesChannelMapping/`
   many-to-many join to `sales_channel`, and the normalized schedule aggregates
   `Aggregate/PickupLocationOpeningHour` (weekly interval rows, ISO `dayOfWeek`
@@ -96,7 +96,7 @@ home per class.
   registration via `addServiceProviderDecorator` — the group must go through the
   service since `actionGroups` derives from `flowBuilderService.getGroups()`),
   `component/sw-flow-pickup-notify-modal` (optional mail-template config), and
-  `snippet/` (labels + the `sw-flow.actions.group.kommandhubClickAndPick` title,
+  `snippet/` (labels + the `sw-flow.actions.group.kmhClickAndPick` title,
   registered with `Locale.extend`). All are imported from `main.js`.
 - `Storefront/Controller/` — `SalesChannelPickupLocationController` (AJAX list +
   detail rendering for the checkout selector).
@@ -123,7 +123,7 @@ home per class.
   `Psr\Log\LoggerInterface` (`error` level) so production keeps a record.
 - **Custom-field / entity / state ids are constants** on the class that owns
   them (`CustomFieldsInstaller::ORDER_PICKUP_LOCATION_CUSTOM_FIELD`,
-  `PickupLocationDefinition::ENTITY_NAME`, ids on `KommandhubClickAndPickSW`).
+  `PickupLocationDefinition::ENTITY_NAME`, ids on `KmhClickAndPickSW`).
   They are global across the install and the lookup key for stored data — a
   rename must happen in exactly one place.
 - **The bootstrap delegates to idempotent installers.** `install` and `update`

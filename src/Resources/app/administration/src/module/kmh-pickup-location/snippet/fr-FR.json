@@ -1,0 +1,141 @@
+{
+  "kmh-pickup-location": {
+    "schedule": {
+      "cardTitle": "Horaires d'ouverture",
+      "labelTimezone": "Fuseau horaire",
+      "helpTimezone": "Fuseau horaire IANA utilisé pour évaluer la disponibilité (ex. Europe/Berlin). Les horaires sont locaux à ce fuseau.",
+      "addInterval": "Ajouter un intervalle",
+      "labelOpen": "Ouvre",
+      "labelClose": "Ferme",
+      "remove": "Supprimer",
+      "specialTitle": "Dates spéciales et jours fériés",
+      "addSpecial": "Ajouter une date spéciale",
+      "labelDate": "Date",
+      "labelClosed": "Fermé",
+      "errorInvalidTime": "Saisissez une heure valide (HH:MM).",
+      "errorOrder": "L'heure de fermeture doit être postérieure à l'ouverture.",
+      "errorOverlap": "Cet intervalle chevauche un autre le même jour.",
+      "weeklyTitle": "Calendrier hebdomadaire",
+      "labelSummary": "Résumé",
+      "closed": "Fermé",
+      "intervalsCount": "intervalle(s)",
+      "specialSummary": "{count} dates spéciales configurées",
+      "summaryEmpty": "Aucun calendrier configuré",
+      "summaryClosed": "Fermé toute la semaine"
+    },
+    "general": {
+      "title": "Points de retrait",
+      "mainMenuItemGeneral": "Points de retrait",
+      "mainMenuItemGeneralDescription": "Gérez vos points de retrait",
+      "deleteWarning": "Avertissement",
+      "buttonDelete": "Supprimer",
+      "messageSaveError": "Une erreur s'est produite lors de l'enregistrement du point de retrait.",
+      "messageSaveSuccess": "Le point de retrait a été enregistré avec succès."
+    },
+    "list": {
+      "title": "Points de retrait",
+      "columnName": "Nom",
+      "columnStreet": "Rue",
+      "columnPostalCode": "Code postal",
+      "columnCity": "Ville",
+      "columnCountry": "Pays",
+      "columnState": "Région",
+      "columnPhoneNumber": "Téléphone",
+      "columnEmail": "E-mail",
+      "columnActive": "Actif",
+      "columnActions": "Actions",
+      "columnLocationCode": "Code du point",
+      "columnOpeningHours": "Heures d'ouverture",
+      "columnClosingHours": "Heures de fermeture",
+      "columnLatitude": "Latitude",
+      "columnLongitude": "Longitude",
+      "columnSalesChannel": "Canal de vente",
+      "deleteSuccessMessage": "Le point de retrait a été supprimé.",
+      "deleteErrorMessage": "Le point de retrait n'a pas pu être supprimé.",
+      "deleteModalTitle": "Supprimer le point de retrait",
+      "deleteModalMessage": "Voulez-vous vraiment supprimer ce point de retrait ?",
+      "addButtonLabel": "Ajouter un point de retrait",
+      "contextMenuDelete": "Supprimer",
+      "contextMenuView": "Voir",
+      "contextMenuEdit": "Modifier",
+      "salesChannel": "Canal de vente",
+      "textDeleteConfirm": "Voulez-vous vraiment supprimer le point de retrait \"{name}\" ?",
+      "messageEmpty": "Aucun point de retrait trouvé."
+    },
+    "detail": {
+      "buttonSave": "Enregistrer"
+    },
+    "create": {
+      "title": "Créer un point de retrait",
+      "buttonCreate": "Créer un point de retrait"
+    },
+    "edit": {
+      "title": "Modifier le point de retrait",
+      "buttonEdit": "Enregistrer les modifications"
+    },
+    "baseForm": {
+      "labelName": "Nom",
+      "labelStreet": "Rue",
+      "labelPostalCode": "Code postal",
+      "labelCity": "Ville",
+      "labelCountry": "Pays",
+      "labelState": "Région",
+      "labelPhoneNumber": "Numéro de téléphone",
+      "labelEmail": "E-mail",
+      "labelActive": "Actif",
+      "labelLocationCode": "Code du point",
+      "labelTimeFormat": "Format de l'heure",
+      "labelTimeFormat12Hour": "12 heures (AM/PM)",
+      "labelTimeFormat24Hour": "24 heures",
+      "labelOpeningHours": "Heures d'ouverture",
+      "labelClosingHours": "Heures de fermeture",
+      "labelLatitude": "Latitude",
+      "labelLongitude": "Longitude",
+      "labelSalesChannel": "Canal de vente",
+      "labelAdditionalAddressLine1": "Complément d'adresse 1",
+      "labelAdditionalAddressLine2": "Complément d'adresse 2",
+      "placeholderName": "Entrez le nom du point de retrait",
+      "placeholderStreet": "Entrez l'adresse",
+      "placeholderPostalCode": "Entrez le code postal",
+      "placeholderCity": "Entrez la ville",
+      "placeholderCountry": "Sélectionnez le pays",
+      "placeholderState": "Sélectionnez la région",
+      "placeholderPhoneNumber": "Entrez le numéro de téléphone",
+      "placeholderEmail": "Entrez l'adresse e-mail",
+      "placeholderLocationCode": "Entrez le code du point",
+      "placeholderTimeFormat": "Sélectionnez le format de l'heure",
+      "placeholderOpeningHours": "Sélectionnez les heures d'ouverture",
+      "placeholderClosingHours": "Sélectionnez les heures de fermeture",
+      "placeholderLatitude": "Entrez la latitude",
+      "placeholderLongitude": "Entrez la longitude",
+      "placeholderSalesChannel": "Sélectionnez le canal de vente",
+      "placeholderAdditionalAddressLine1": "Entrez le complément d'adresse 1",
+      "placeholderAdditionalAddressLine2": "Entrez le complément d'adresse 2",
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
+    },
+    "filter": {
+      "saleChannel": {
+        "label": "Canal de vente",
+        "placeholder": "Sélectionnez le canal de vente"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "kmh_pickup_location": {
+        "label": "Points de retrait"
+      }
+    }
+  },
+  "global": {
+    "entities": {
+      "kmh_pickup_location": "Point de retrait"
+    }
+  }
+}

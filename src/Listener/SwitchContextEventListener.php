@@ -7,7 +7,7 @@ namespace Kommandhub\ClickAndPickSW\Listener;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextKeys;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationValidator;
 use Shopware\Core\Framework\Routing\Event\SalesChannelContextResolvedEvent;
 use Shopware\Core\Framework\Struct\ArrayStruct;
@@ -91,7 +91,7 @@ readonly class SwitchContextEventListener
     {
         $context = $event->getSalesChannelContext();
 
-        if ($context->getShippingMethod()->getId() !== KommandhubClickAndPickSW::SHIPPING_METHOD_ID) {
+        if ($context->getShippingMethod()->getId() !== KmhClickAndPickSW::SHIPPING_METHOD_ID) {
             return;
         }
 

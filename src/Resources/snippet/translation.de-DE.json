@@ -1,20 +1,20 @@
 {
   "checkout": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Bitte wählen Sie einen gültigen Abholort aus, bevor Sie Ihre Bestellung aufgeben.",
       "unsupportedDeliveryMethod": "Die ausgewählte Versandart \"%deliveryMethodName%\" wird für die gewählte Zahlungsmethode nicht unterstützt. Bitte wählen Sie eine andere Versandart aus.",
       "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit."
     }
   },
   "error": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Bitte wählen Sie einen gültigen Abholort aus, bevor Sie Ihre Bestellung aufgeben.",
       "unsupportedDeliveryMethod": "Die ausgewählte Versandart \"%deliveryMethodName%\" wird für die gewählte Zahlungsmethode nicht unterstützt. Bitte wählen Sie eine andere Versandart aus.",
       "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit."
     }
   },
   "general": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "daysOfWeek": {
         "monday": "Montag",
         "tuesday": "Dienstag",

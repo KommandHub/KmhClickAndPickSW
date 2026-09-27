@@ -45,7 +45,7 @@ class FormattedCalendarDays extends AbstractExtension
         }
 
         $translatedDays = array_map(
-            fn (string $day): string => $this->translator->trans('general.kommandhub-click-and-pick.daysOfWeek.' . $day),
+            fn (string $day): string => $this->translator->trans('general.kmh-click-and-pick.daysOfWeek.' . $day),
             $days
         );
 

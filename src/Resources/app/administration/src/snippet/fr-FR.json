@@ -2,11 +2,11 @@
   "sw-flow": {
     "actions": {
       "group": {
-        "kommandhubClickAndPick": "Click & Pick"
+        "kmhClickAndPick": "Click & Pick"
       }
     }
   },
-  "kommandhub-pickup-notify-action": {
+  "kmh-pickup-notify-action": {
     "titleSendNotification": "Envoyer la notification de retrait au point de retrait",
     "description": "Envoyer un e-mail au point de retrait de la commande afin qu'il puisse la préparer",
     "labelMailTemplate": "Modèle d'e-mail",
@@ -14,7 +14,7 @@
     "mailTemplateHint": "Laisser vide pour utiliser le modèle par défaut du plugin. L'e-mail est toujours envoyé au point de retrait de la commande.",
     "buttonSaveAction": "Enregistrer l'action"
   },
-  "kommandhub-pickup-sms-action": {
+  "kmh-pickup-sms-action": {
     "titleSendSms": "Envoyer un SMS au point de retrait",
     "description": "Envoie un SMS au point de retrait de la commande (nécessite le plugin SMS installé et actif)"
   }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kommandhub\ClickAndPickSW\Installer;
 
 use Kommandhub\ClickAndPickSW\Checkout\Payment\PayOnPickupPaymentHandler;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Shopware\Core\Checkout\Cart\Rule\ShippingMethodRule;
 use Shopware\Core\Checkout\Payment\PaymentMethodCollection;
 use Shopware\Core\Framework\Context;
@@ -24,7 +24,7 @@ readonly class PaymentMethodInstaller
 {
     public const PAYMENT_METHOD_ID = 'c76322cc1bff7828011f266d9b47f559';
     public const AVAILABILITY_RULE_ID = 'cde3be3c21d76fae830b2e815a6d82ef';
-    public const TECHNICAL_NAME = 'kommandhub_pay_on_pickup';
+    public const TECHNICAL_NAME = 'kmh_pay_on_pickup';
 
     /**
      * @param EntityRepository<PaymentMethodCollection> $paymentMethodRepository
@@ -76,7 +76,7 @@ readonly class PaymentMethodInstaller
                             'type' => ShippingMethodRule::RULE_NAME,
                             'value' => [
                                 'operator' => Rule::OPERATOR_EQ,
-                                'shippingMethodIds' => [KommandhubClickAndPickSW::SHIPPING_METHOD_ID],
+                                'shippingMethodIds' => [KmhClickAndPickSW::SHIPPING_METHOD_ID],
                             ],
                         ],
                     ],

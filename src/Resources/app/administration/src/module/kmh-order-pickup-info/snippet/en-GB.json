@@ -1,0 +1,30 @@
+{
+  "kmh-order-pickup-info": {
+    "tab": {
+      "title": "Pickup information"
+    },
+    "empty": {
+      "title": "No pickup information",
+      "subline": "This order was not placed for pickup, so there is no pickup information to display."
+    },
+    "location": {
+      "cardTitle": "Pickup location",
+      "name": "Name",
+      "code": "Location code",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "timezone": "Timezone",
+      "deletedTitle": "Pickup location deleted",
+      "deletedText": "The pickup location linked to this order has since been deleted. The pickup details chosen by the customer are still shown below."
+    },
+    "appointment": {
+      "cardTitle": "Pickup appointment",
+      "pickupTime": "Pickup date & time",
+      "pickupTimeEmpty": "No specific time selected",
+      "comment": "Customer instructions",
+      "commentEmpty": "None provided",
+      "selectedAt": "Selected on"
+    }
+  }
+}

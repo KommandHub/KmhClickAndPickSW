@@ -1,20 +1,20 @@
 {
   "checkout": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
       "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
     }
   },
   "error": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
       "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
     }
   },
   "general": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "daysOfWeek": {
         "monday": "Monday",
         "tuesday": "Tuesday",

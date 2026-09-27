@@ -20,7 +20,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  * are handled by Flow Builder flows reacting to the trigger — no mail here.
  *
  * Loading pickup data onto an order is handled by the DAL OneToOne association
- * (`order.kommandhubPickupLocation`), so no order-loaded listener is needed.
+ * (`order.kmhPickupLocation`), so no order-loaded listener is needed.
  */
 readonly class OrderListener
 {

@@ -1,20 +1,20 @@
 {
   "checkout": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Veuillez sélectionner un lieu de retrait valide avant de passer votre commande.",
       "unsupportedDeliveryMethod": "Le mode de livraison sélectionné « \"%deliveryMethodName%\" » n'est pas pris en charge pour le mode de paiement choisi. Veuillez sélectionner un autre mode de livraison.",
       "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible."
     }
   },
   "error": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Veuillez sélectionner un lieu de retrait valide avant de passer votre commande.",
       "unsupportedDeliveryMethod": "Le mode de livraison sélectionné « \"%deliveryMethodName%\" » n'est pas pris en charge pour le mode de paiement choisi. Veuillez sélectionner un autre mode de livraison.",
       "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible."
     }
   },
   "general": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "daysOfWeek": {
         "monday": "Lundi",
         "tuesday": "Mardi",

@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('shopware.entity.definition', ['entity' => PickupLocationOpeningHourDefinition::ENTITY_NAME])]
 class PickupLocationOpeningHourDefinition extends EntityDefinition
 {
-    final public const ENTITY_NAME = 'kommandhub_pickup_location_opening_hour';
+    final public const ENTITY_NAME = 'kmh_pickup_location_opening_hour';
 
     public function getEntityName(): string
     {

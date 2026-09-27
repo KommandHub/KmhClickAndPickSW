@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kommandhub\ClickAndPickSW\Tests\Unit\Installer;
 
 use Kommandhub\ClickAndPickSW\Installer\ShippingMethodInstaller;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -48,7 +48,7 @@ class ShippingMethodInstallerTest extends TestCase
         $this->shippingMethodRepository
             ->expects(static::once())
             ->method('searchIds')
-            ->willReturn(IdSearchResult::fromIds([KommandhubClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
+            ->willReturn(IdSearchResult::fromIds([KmhClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
         $this->shippingMethodRepository->expects(static::never())->method('create');
 
         $this->installer->install($this->context);
@@ -78,7 +78,7 @@ class ShippingMethodInstallerTest extends TestCase
                     $shippingMethod = $payload[0] ?? null;
                     $price = $shippingMethod['prices'][0]['currencyPrice'][0] ?? null;
 
-                    return $shippingMethod['id'] === KommandhubClickAndPickSW::SHIPPING_METHOD_ID
+                    return $shippingMethod['id'] === KmhClickAndPickSW::SHIPPING_METHOD_ID
                         && $shippingMethod['technicalName'] === ShippingMethodInstaller::TECHNICAL_NAME
                         && $shippingMethod['deliveryTimeId'] === self::DELIVERY_TIME_ID
                         && $shippingMethod['availabilityRuleId'] === 'all-customers-rule-id'
@@ -127,12 +127,12 @@ class ShippingMethodInstallerTest extends TestCase
         $this->shippingMethodRepository
             ->expects(static::once())
             ->method('searchIds')
-            ->willReturn(IdSearchResult::fromIds([KommandhubClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
+            ->willReturn(IdSearchResult::fromIds([KmhClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
         $this->shippingMethodRepository
             ->expects(static::once())
             ->method('update')
             ->with([[
-                'id' => KommandhubClickAndPickSW::SHIPPING_METHOD_ID,
+                'id' => KmhClickAndPickSW::SHIPPING_METHOD_ID,
                 'active' => true,
             ]], $this->context);
 
@@ -144,12 +144,12 @@ class ShippingMethodInstallerTest extends TestCase
         $this->shippingMethodRepository
             ->expects(static::once())
             ->method('searchIds')
-            ->willReturn(IdSearchResult::fromIds([KommandhubClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
+            ->willReturn(IdSearchResult::fromIds([KmhClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
         $this->shippingMethodRepository
             ->expects(static::once())
             ->method('update')
             ->with([[
-                'id' => KommandhubClickAndPickSW::SHIPPING_METHOD_ID,
+                'id' => KmhClickAndPickSW::SHIPPING_METHOD_ID,
                 'active' => false,
             ]], $this->context);
 

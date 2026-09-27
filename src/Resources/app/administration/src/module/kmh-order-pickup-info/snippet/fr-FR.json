@@ -1,0 +1,30 @@
+{
+  "kmh-order-pickup-info": {
+    "tab": {
+      "title": "Informations de retrait"
+    },
+    "empty": {
+      "title": "Aucune information de retrait",
+      "subline": "Cette commande n'a pas été passée pour un retrait, il n'y a donc aucune information de retrait à afficher."
+    },
+    "location": {
+      "cardTitle": "Lieu de retrait",
+      "name": "Nom",
+      "code": "Code du lieu",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "timezone": "Fuseau horaire",
+      "deletedTitle": "Lieu de retrait supprimé",
+      "deletedText": "Le lieu de retrait associé à cette commande a depuis été supprimé. Les détails de retrait choisis par le client sont toujours affichés ci-dessous."
+    },
+    "appointment": {
+      "cardTitle": "Rendez-vous de retrait",
+      "pickupTime": "Date et heure de retrait",
+      "pickupTimeEmpty": "Aucune heure précise sélectionnée",
+      "comment": "Instructions du client",
+      "commentEmpty": "Aucune fournie",
+      "selectedAt": "Sélectionné le"
+    }
+  }
+}

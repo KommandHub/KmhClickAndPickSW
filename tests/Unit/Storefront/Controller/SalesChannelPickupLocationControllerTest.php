@@ -94,7 +94,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
 
         static::assertSame(200, $response->getStatusCode());
         static::assertSame(
-            '@KommandhubClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
+            '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
             $this->controller->lastTemplate
         );
         static::assertSame([$open], $this->controller->lastParameters['locations']);
@@ -134,7 +134,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
 
         static::assertSame(200, $response->getStatusCode());
         static::assertSame(
-            '@KommandhubClickAndPickSW/storefront/component/shipping/custom/pickup-time-select-option.html.twig',
+            '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-time-select-option.html.twig',
             $this->controller->lastTemplate
         );
         static::assertSame([$slot], $this->controller->lastParameters['slots']);

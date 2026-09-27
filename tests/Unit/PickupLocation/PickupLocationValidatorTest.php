@@ -57,8 +57,8 @@ class PickupLocationValidatorTest extends TestCase
 
                     $queries = $multiFilter->getQueries();
 
-                    return $definition->getName() === 'kommandhub_click_and_pick.context_switch'
-                        && $constraint->getEntity() === 'kommandhub_pickup_location'
+                    return $definition->getName() === 'kmh_click_and_pick.context_switch'
+                        && $constraint->getEntity() === 'kmh_pickup_location'
                         && $constraint->getContext() === $context->getContext()
                         && $multiFilter->getOperator() === MultiFilter::CONNECTION_AND
                         && $queries[0] instanceof EqualsFilter

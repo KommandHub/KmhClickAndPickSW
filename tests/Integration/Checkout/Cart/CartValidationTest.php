@@ -6,7 +6,7 @@ namespace Kommandhub\ClickAndPickSW\Tests\Integration\Checkout\Cart;
 
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupLocationRequiredCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
@@ -49,7 +49,7 @@ class CartValidationTest extends TestCase
         $productId = $this->createProduct(Context::createDefaultContext(), $salesChannelId);
 
         $context = $this->factory->create(Uuid::randomHex(), $salesChannelId, [
-            'shippingMethodId' => KommandhubClickAndPickSW::SHIPPING_METHOD_ID,
+            'shippingMethodId' => KmhClickAndPickSW::SHIPPING_METHOD_ID,
         ]);
 
         $cart = $this->cartService->getCart($context->getToken(), $context);

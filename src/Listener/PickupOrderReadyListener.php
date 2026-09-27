@@ -19,7 +19,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * Fires the {@see PickupOrderReadyEvent} flow trigger when a pickup order's
  * delivery enters the "ready" state. The pickup location comes from the order's
- * OneToOne pickup record (`order.kommandhubPickupLocation`), the single source
+ * OneToOne pickup record (`order.kmhPickupLocation`), the single source
  * of truth — no custom field.
  *
  * The delivery state-change event fires twice (leave + enter) under one name, so
@@ -70,7 +70,7 @@ readonly class PickupOrderReadyListener
     {
         $criteria = new Criteria([$orderDeliveryId]);
         $criteria->addAssociation('order.orderCustomer');
-        $criteria->addAssociation('order.kommandhubPickupLocation.pickupLocation');
+        $criteria->addAssociation('order.kmhPickupLocation.pickupLocation');
 
         $delivery = $this->orderDeliveryRepository->search($criteria, $context)->getEntities()->first();
 
@@ -79,7 +79,7 @@ readonly class PickupOrderReadyListener
 
     private function resolvePickupRecord(OrderEntity $order): ?OrderPickupLocationEntity
     {
-        $orderPickup = $order->getExtension('kommandhubPickupLocation');
+        $orderPickup = $order->getExtension('kmhPickupLocation');
 
         return $orderPickup instanceof OrderPickupLocationEntity ? $orderPickup : null;
     }

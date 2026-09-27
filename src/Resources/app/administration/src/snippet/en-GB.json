@@ -2,11 +2,11 @@
   "sw-flow": {
     "actions": {
       "group": {
-        "kommandhubClickAndPick": "Click & Pick"
+        "kmhClickAndPick": "Click & Pick"
       }
     }
   },
-  "kommandhub-pickup-notify-action": {
+  "kmh-pickup-notify-action": {
     "titleSendNotification": "Send pickup notification to admin",
     "description": "Email the order's pickup location so it can prepare the order",
     "labelMailTemplate": "Mail template",
@@ -14,7 +14,7 @@
     "mailTemplateHint": "Leave empty to use the plugin's default admin pickup template. The email is always sent to the order's pickup location.",
     "buttonSaveAction": "Save action"
   },
-  "kommandhub-pickup-sms-action": {
+  "kmh-pickup-sms-action": {
     "titleSendSms": "Send pickup SMS to location",
     "description": "Text the order's pickup location (requires the SMS plugin to be installed and active)"
   }

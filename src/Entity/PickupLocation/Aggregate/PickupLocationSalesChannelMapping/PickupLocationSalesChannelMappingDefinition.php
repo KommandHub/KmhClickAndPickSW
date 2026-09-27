@@ -22,7 +22,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
  */
 class PickupLocationSalesChannelMappingDefinition extends MappingEntityDefinition
 {
-    public const ENTITY_NAME = 'kommandhub_pickup_location_sales_channel';
+    public const ENTITY_NAME = 'kmh_pickup_location_sales_channel';
 
     public function getEntityName(): string
     {

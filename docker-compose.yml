@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: 'kommandhub-click-and-pick-shopware:6.7.8.0'
+    image: 'kmh-click-and-pick-shopware:6.7.8.0'
     container_name: click-and-pick-plugin
     environment:
       - 'XDEBUG_ENABLED=0'
@@ -13,15 +13,15 @@ services:
     volumes:
       # ----------------------------------------------------------------------------------------------------------------------------------
       # PLUGINS
-      - "./:/var/www/html/custom/static-plugins/KommandhubClickAndPickSW"
+      - "./:/var/www/html/custom/static-plugins/KmhClickAndPickSW"
       - "database:/var/lib/mysql"
       - "./Makefile:/var/www/html/Makefile"
       # - ".env.test:/var/www/html/.env.test"
       # ----------------------------------------------------------------------------------------------------------------------------------
       # EXCLUDE
-      - "/var/www/html/custom/static-plugins/KommandhubClickAndPickSW/.git/"
-      - "/var/www/html/custom/static-plugins/KommandhubClickAndPickSW/node_modules/"
-      - "/var/www/html/custom/static-plugins/KommandhubClickAndPickSW/vendor/"
+      - "/var/www/html/custom/static-plugins/KmhClickAndPickSW/.git/"
+      - "/var/www/html/custom/static-plugins/KmhClickAndPickSW/node_modules/"
+      - "/var/www/html/custom/static-plugins/KmhClickAndPickSW/vendor/"
       # ----------------------------------------------------------------------------------------------------------------------------------
 
 volumes:

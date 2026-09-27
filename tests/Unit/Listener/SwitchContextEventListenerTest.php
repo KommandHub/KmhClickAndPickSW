@@ -7,7 +7,7 @@ namespace Kommandhub\ClickAndPickSW\Tests\Unit\Listener;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextKeys;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\Listener\SwitchContextEventListener;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -148,7 +148,7 @@ class SwitchContextEventListenerTest extends TestCase
 
     public function testResolvedAttachesStoredSelectionAsExtension(): void
     {
-        $context = $this->context(KommandhubClickAndPickSW::SHIPPING_METHOD_ID);
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
 
         $this->storage
             ->method('load')
@@ -170,7 +170,7 @@ class SwitchContextEventListenerTest extends TestCase
 
     public function testResolvedAttachesNothingWhenSelectionEmpty(): void
     {
-        $context = $this->context(KommandhubClickAndPickSW::SHIPPING_METHOD_ID);
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
 
         $this->storage->method('load')->willReturn(new StoredPickupSelection());
 

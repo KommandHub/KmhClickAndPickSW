@@ -22,15 +22,15 @@ use Symfony\Component\Routing\Attribute\Route;
 class SalesChannelPickupLocationController extends StorefrontController
 {
     public function __construct(
-        private readonly EntityRepository $kommandhubPickupLocationRepository,
+        private readonly EntityRepository $kmhPickupLocationRepository,
         private readonly PickupLocationAvailabilityService $availabilityService,
         private readonly PickupTimeSlotService $slotService,
     ) {
     }
 
     #[Route(
-        path: '/kommandhub/sales-channel/{salesChannelId}/pickup-locations',
-        name: 'frontend.kommandhub.sales-channel.pickup-locations.index',
+        path: '/kmh/sales-channel/{salesChannelId}/pickup-locations',
+        name: 'frontend.kmh.sales-channel.pickup-locations.index',
         defaults: ['XmlHttpRequest' => 'true'],
         methods: ['GET']
     )]
@@ -52,7 +52,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         $criteria->addAssociation('specialHours');
 
         /** @var list<\Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity> $locations */
-        $locations = array_values($this->kommandhubPickupLocationRepository
+        $locations = array_values($this->kmhPickupLocationRepository
             ->search($criteria, $context->getContext())
             ->getEntities()
             ->getElements());
@@ -63,14 +63,14 @@ class SalesChannelPickupLocationController extends StorefrontController
         $openLocations = $this->availabilityService->filterOpenOnDate($locations);
 
         return $this->renderStorefront(
-            '@KommandhubClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
+            '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
             ['locations' => $openLocations]
         );
     }
 
     #[Route(
-        path: '/kommandhub/sales-channel/{salesChannelId}/location/{locationId}/slots',
-        name: 'frontend.kommandhub.sales-channel.pickup-locations.slots',
+        path: '/kmh/sales-channel/{salesChannelId}/location/{locationId}/slots',
+        name: 'frontend.kmh.sales-channel.pickup-locations.slots',
         defaults: ['XmlHttpRequest' => 'true'],
         methods: ['GET']
     )]
@@ -87,7 +87,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         $criteria->addAssociation('specialHours');
         $criteria->setLimit(1);
 
-        $location = $this->kommandhubPickupLocationRepository->search(
+        $location = $this->kmhPickupLocationRepository->search(
             $criteria,
             $salesChannelContext->getContext()
         )->first();
@@ -109,7 +109,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         }
 
         return $this->renderStorefront(
-            '@KommandhubClickAndPickSW/storefront/component/shipping/custom/pickup-time-select-option.html.twig',
+            '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-time-select-option.html.twig',
             ['slots' => $slots]
         );
     }

@@ -8,7 +8,7 @@ use Shopware\Core\Checkout\Cart\Error\Error;
 
 final class PickupLocationRequiredCartBlockerError extends Error
 {
-    private const KEY = 'kommandhub-click-and-pick.pickupLocationRequired';
+    private const KEY = 'kmh-click-and-pick.pickupLocationRequired';
 
     public function __construct()
     {

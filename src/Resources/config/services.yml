@@ -24,7 +24,7 @@ services:
       $systemConfigService: '@Shopware\Core\System\SystemConfig\SystemConfigService'
       $logger: '@logger'
     tags:
-      - { name: 'flow.action', priority: 500, key: 'action.kommandhub.pickup.notify_admin' }
+      - { name: 'flow.action', priority: 500, key: 'action.kmh.pickup.notify_admin' }
 
   # SMS Flow Builder action. Soft dependency on KommandhubSmsSW: its gateway is
   # referenced with `@?` so the argument is null when that plugin is not
@@ -34,4 +34,4 @@ services:
       $logger: '@logger'
       $smsGateway: '@?Kommandhub\SmsSW\Notification\Gateway\NotificationGatewayInterface'
     tags:
-      - { name: 'flow.action', priority: 500, key: 'action.kommandhub.pickup.notify_sms' }
+      - { name: 'flow.action', priority: 500, key: 'action.kmh.pickup.notify_sms' }

@@ -50,7 +50,7 @@
             <!-- Plugin bootstrap: install/update/activate lifecycle glue that
                  only runs with a booted Shopware kernel. Excluded so the
                  no-kernel CI coverage reflects code it can actually exercise. -->
-            <file>src/KommandhubClickAndPickSW.php</file>
+            <file>src/KmhClickAndPickSW.php</file>
         </exclude>
     </source>
 

@@ -2,11 +2,11 @@
   "sw-flow": {
     "actions": {
       "group": {
-        "kommandhubClickAndPick": "Click & Pick"
+        "kmhClickAndPick": "Click & Pick"
       }
     }
   },
-  "kommandhub-pickup-notify-action": {
+  "kmh-pickup-notify-action": {
     "titleSendNotification": "Abhol-Benachrichtigung an Standort senden",
     "description": "Den Abholort der Bestellung per E-Mail benachrichtigen, damit die Bestellung vorbereitet werden kann",
     "labelMailTemplate": "E-Mail-Vorlage",
@@ -14,7 +14,7 @@
     "mailTemplateHint": "Leer lassen, um die Standardvorlage des Plugins zu verwenden. Die E-Mail wird immer an den Abholort der Bestellung gesendet.",
     "buttonSaveAction": "Aktion speichern"
   },
-  "kommandhub-pickup-sms-action": {
+  "kmh-pickup-sms-action": {
     "titleSendSms": "Abhol-SMS an Standort senden",
     "description": "Sendet dem Abholort der Bestellung eine SMS (erfordert ein installiertes und aktives SMS-Plugin)"
   }

@@ -3,7 +3,7 @@
     {% for location in locations %}
         <option class="pickup-location-location-field-id-option" value="{{ location.id }}"
                 {% if location.id is same as(context.extensions.pickupLocation.id) %}selected{% endif %}>
-            {{ location.name }}{% if config('KommandhubClickAndPickSW.config.showStreetNameInPickupLocationSelectionField') %} - {{ location.street }}{% endif %}, {{ location.city }}
+            {{ location.name }}{% if config('KmhClickAndPickSW.config.showStreetNameInPickupLocationSelectionField') %} - {{ location.street }}{% endif %}, {{ location.city }}
         </option>
     {% endfor %}
 {% endblock %}
