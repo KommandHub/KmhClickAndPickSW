@@ -143,7 +143,7 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{subject: string|null, senderName: string|null, recipients: array<string, string>, salesChannelId: string|null, mailTemplateData: array<string, mixed>, contentHtml: string|null, contentPlain: string|null, attachmentsConfig: MailAttachmentsConfig, senderEmail?: string, mediaIds?: list<string>, attachments?: list<mixed>, documentIds?: list<string>}
      */
     private function buildMailData(
         MailTemplateEntity $template,
@@ -176,6 +176,9 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
                 [],
                 $order->getId()
             ),
+            'mediaIds' => [],
+            'attachments' => [],
+            'documentIds' => [],
         ];
 
         // Only pin the sender when we have a valid one; otherwise the mail
