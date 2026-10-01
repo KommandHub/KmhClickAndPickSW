@@ -22,6 +22,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StorefrontRouteScope::ID]])]
 class SalesChannelPickupLocationController extends StorefrontController
 {
+    private const EARTH_RADIUS_KM = 6371.0;
+
     public function __construct(
         private readonly EntityRepository $kmhPickupLocationRepository,
         private readonly PickupLocationAvailabilityService $availabilityService,
@@ -36,7 +38,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         defaults: ['XmlHttpRequest' => 'true'],
         methods: ['GET']
     )]
-    public function index(string $salesChannelId, SalesChannelContext $context): Response
+    public function index(string $salesChannelId, Request $request, SalesChannelContext $context): Response
     {
         $enableSelection = $this->systemConfigService->getBool(
             'KmhClickAndPickSW.config.enablePickupLocationSelection',
@@ -77,7 +79,10 @@ class SalesChannelPickupLocationController extends StorefrontController
         return $this->renderStorefront(
             '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
             [
-                'locations' => $openLocations,
+                'locations' => $this->sortLocations(
+                    $openLocations,
+                    $this->resolveCustomerCoordinates($request, $salesChannelId)
+                ),
                 'selectionDisabled' => !$enableSelection,
             ]
         );
@@ -127,6 +132,92 @@ class SalesChannelPickupLocationController extends StorefrontController
             '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-time-select-option.html.twig',
             ['slots' => $slots]
         );
+    }
+
+    /**
+     * Customer coordinates for this request only — never stored, logged or
+     * echoed back. Both must be valid and the feature enabled for the channel.
+     *
+     * @return array{float, float}|null
+     */
+    private function resolveCustomerCoordinates(Request $request, string $salesChannelId): ?array
+    {
+        $latitude = $this->parseCoordinate($request->query->get('lat'), 90.0);
+        $longitude = $this->parseCoordinate($request->query->get('lon'), 180.0);
+
+        if ($latitude === null || $longitude === null) {
+            return null;
+        }
+
+        if (!$this->systemConfigService->getBool('KmhClickAndPickSW.config.enableGeolocationSorting', $salesChannelId)) {
+            return null;
+        }
+
+        return [$latitude, $longitude];
+    }
+
+    /**
+     * Nearest first when an origin is given; locations without usable stored
+     * coordinates go last. Name breaks ties and is the order without an origin.
+     *
+     * @param list<PickupLocationEntity> $locations
+     * @param array{float, float}|null $origin
+     *
+     * @return list<PickupLocationEntity>
+     */
+    private function sortLocations(array $locations, ?array $origin): array
+    {
+        $rows = array_map(
+            fn (PickupLocationEntity $location): array => [$location, $origin === null ? null : $this->distanceTo($location, $origin)],
+            $locations
+        );
+
+        usort($rows, static function (array $a, array $b): int {
+            $byDistance = match (true) {
+                $a[1] === $b[1] => 0,
+                $a[1] === null => 1,
+                $b[1] === null => -1,
+                default => $a[1] <=> $b[1],
+            };
+
+            return $byDistance !== 0 ? $byDistance : strnatcasecmp($a[0]->getName(), $b[0]->getName());
+        });
+
+        return array_column($rows, 0);
+    }
+
+    /**
+     * Haversine great-circle distance in km, or null when the location's stored
+     * coordinates are blank or not numeric.
+     *
+     * @param array{float, float} $origin
+     */
+    private function distanceTo(PickupLocationEntity $location, array $origin): ?float
+    {
+        $latitude = $this->parseCoordinate($location->getLatitude(), 90.0);
+        $longitude = $this->parseCoordinate($location->getLongitude(), 180.0);
+
+        if ($latitude === null || $longitude === null) {
+            return null;
+        }
+
+        $deltaLatitude = deg2rad($latitude - $origin[0]);
+        $deltaLongitude = deg2rad($longitude - $origin[1]);
+        $a = sin($deltaLatitude / 2) ** 2
+            + cos(deg2rad($origin[0])) * cos(deg2rad($latitude)) * sin($deltaLongitude / 2) ** 2;
+
+        return self::EARTH_RADIUS_KM * 2 * atan2(sqrt($a), sqrt(1 - $a));
+    }
+
+    private function parseCoordinate(mixed $value, float $limit): ?float
+    {
+        if (!\is_string($value) || !is_numeric(trim($value))) {
+            return null;
+        }
+
+        $coordinate = (float)trim($value);
+
+        return abs($coordinate) <= $limit ? $coordinate : null;
     }
 
     private function buildLocalDate(string $date, ?string $timezone): ?\DateTimeImmutable

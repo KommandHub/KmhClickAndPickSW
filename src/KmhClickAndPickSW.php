@@ -40,6 +40,7 @@ class KmhClickAndPickSW extends Plugin
         'enablePickupLocationSelection' => true,
         'showStreetNameInPickupLocationSelectionField' => false,
         'showContactDetailInPickupLocationInfo' => true,
+        'enableGeolocationSorting' => true,
     ];
 
     public function install(InstallContext $installContext): void

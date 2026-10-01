@@ -214,9 +214,21 @@ ISO-8601 value the storefront submits, parsed back by the resolver).
   - `…pickup-locations.index` — active + sales-channel-assigned locations open on
     the current date (renders `<option>` HTML). Filters by `salesChannels.id`
     **without hydrating** the association (avoids per-row over-fetch); loads the
-    schedule associations, batched.
+    schedule associations, batched. Ordered by name (`strnatcasecmp`). Optional
+    `lat`/`lon` query parameters (sent rounded to 2 decimals by the storefront)
+    switch to nearest-first ordering by Haversine distance (R = 6371 km) when both
+    are numeric and in range (±90 / ±180) and `enableGeolocationSorting` is on for
+    the sales channel; otherwise they are ignored. Locations with blank or
+    non-numeric stored coordinates come last; ties go by name. Coordinates are used
+    for that response only — not stored, logged or cached, and no distances are
+    rendered. The response must stay uncacheable (no HTTP-cache attribute).
   - `…pickup-locations.slots` — bookable time-slot `<option>` HTML for a location +
     `date` query.
+- Geolocation consent: `Storefront\Cookie\PickupLocationGeolocationCookieListener`
+  adds the optional cookie group `kmh_pickup_location_geolocation` (via
+  `CookieGroupCollectEvent`, not the deprecated `CookieProviderInterface`). The
+  group is its own cookie; accepting it sets `kmh_pickup_location_geolocation=1`.
+  Name/description snippets: `general.kmh-click-and-pick.cookie.*`.
 
 ## 8. Administration integration
 
@@ -274,14 +286,17 @@ Actions (`flow.action`, declared explicitly in `services.yml`):
 
 ## 11. Configuration
 
-`src/Resources/config/config.xml` — three booleans, consumed only in storefront
-Twig via `config('KmhClickAndPickSW.config.<key>')`:
+`src/Resources/config/config.xml` — four booleans, read in storefront Twig via
+`config('KmhClickAndPickSW.config.<key>')` and, where noted, by the storefront
+controller. The plugin seeds the defaults on install/update for keys never saved
+(`KmhClickAndPickSW::CONFIG_DEFAULTS`):
 
 | Key | Default | Effect |
 |-----|---------|--------|
-| `enablePickupLocationSelection` | `true` | gates the in-checkout selector |
+| `enablePickupLocationSelection` | `true` | gates the in-checkout selector (Twig + controller) |
 | `showStreetNameInPickupLocationSelectionField` | `false` | street in the option label |
 | `showContactDetailInPickupLocationInfo` | `true` | contact rows in the info card |
+| `enableGeolocationSorting` | `true` | "Use my location" button + proximity ordering of the location list (Twig + controller, see §7) |
 
 The admin-notify action reads the sender email from core system config
 (`SystemConfigService`), not from plugin config.

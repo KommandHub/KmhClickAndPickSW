@@ -10,7 +10,8 @@
             {% set enableSelection = config('KmhClickAndPickSW.config.enablePickupLocationSelection') %}
             {% set salesChannelPickupLocationOptions = {
                 url: path("frontend.kmh.sales-channel.pickup-locations.index", { salesChannelId: context.salesChannel.id }),
-                selectedPickupLocationId: context.extensions.pickupLocation.id
+                selectedPickupLocationId: context.extensions.pickupLocation.id,
+                geolocationEnabled: config('KmhClickAndPickSW.config.enableGeolocationSorting') ? true : false
             } %}
 
             {% block component_shipping_method_label_kmh_self_pickup_field_container %}
@@ -27,6 +28,23 @@
                             class="form-control shipping-method-input"
                             {% if not enableSelection %}disabled{% endif %}>
                     </select>
+                {% endblock %}
+                {% block component_shipping_method_label_kmh_self_pickup_geolocation %}
+                    {% if config('KmhClickAndPickSW.config.enableGeolocationSorting') %}
+                        {# Shown by the JS plugin only with geolocation support + cookie consent. #}
+                        <button type="button"
+                                class="btn btn-link btn-sm px-0 mt-1"
+                                data-pickup-location-geolocation
+                                hidden>
+                            {{ "general.kmh-click-and-pick.geolocation.useMyLocation" | trans }}
+                        </button>
+                        <div class="form-text"
+                             data-pickup-location-geolocation-notice
+                             role="status"
+                             hidden>
+                            {{ "general.kmh-click-and-pick.geolocation.locationUnavailable" | trans }}
+                        </div>
+                    {% endif %}
                 {% endblock %}
 
                 {% if context.extensions.pickupLocation.id is not null %}

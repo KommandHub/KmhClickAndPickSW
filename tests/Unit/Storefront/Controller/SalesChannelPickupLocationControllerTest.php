@@ -10,6 +10,7 @@ use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupLocationAvailabi
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupTimeSlotService;
 use Kommandhub\ClickAndPickSW\Storefront\Controller\SalesChannelPickupLocationController;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
@@ -19,6 +20,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(SalesChannelPickupLocationController::class)]
@@ -101,7 +103,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
             ->with([$open, $closed])
             ->willReturn([$open]);
 
-        $response = $this->controller->index('sales-channel-id', $context);
+        $response = $this->controller->index('sales-channel-id', new Request(), $context);
 
         static::assertSame(200, $response->getStatusCode());
         static::assertSame(
@@ -170,7 +172,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
             ->with([$defaultLocation])
             ->willReturn([$defaultLocation]);
 
-        $response = $controller->index('sales-channel-id', $context);
+        $response = $controller->index('sales-channel-id', new Request(), $context);
 
         static::assertSame(200, $response->getStatusCode());
         static::assertSame(
@@ -179,6 +181,100 @@ class SalesChannelPickupLocationControllerTest extends TestCase
         );
         static::assertSame([$defaultLocation], $controller->lastParameters['locations']);
         static::assertTrue($controller->lastParameters['selectionDisabled']);
+    }
+
+    public function testIndexOrdersByNameWithoutCoordinates(): void
+    {
+        $bravo = $this->location('Bravo', '6.9', '3.38');
+        $alpha = $this->location('alpha', '6.53', '3.39');
+        $charlie = $this->location('Charlie', null, null);
+
+        static::assertSame([$alpha, $bravo, $charlie], $this->indexLocations([$bravo, $charlie, $alpha], []));
+        static::assertSame(['locations', 'selectionDisabled'], array_keys($this->controller->lastParameters));
+    }
+
+    public function testIndexOrdersNearestFirstWithValidCoordinates(): void
+    {
+        // Distances from (6.52, 3.38): ~1.6 km, ~11 km, ~42 km — name order differs.
+        $near = $this->location('Zulu', '6.53', '3.39');
+        $middle = $this->location('Alpha', '6.62', '3.38');
+        $far = $this->location('Mike', '6.9', '3.38');
+
+        $ordered = $this->indexLocations([$far, $middle, $near], ['lat' => '6.52', 'lon' => '3.38']);
+
+        static::assertSame([$near, $middle, $far], $ordered);
+        // Option entities only — no distance values are handed to the template.
+        static::assertSame(['locations', 'selectionDisabled'], array_keys($this->controller->lastParameters));
+
+        foreach ($this->controller->lastParameters['locations'] as $location) {
+            static::assertInstanceOf(PickupLocationEntity::class, $location);
+        }
+    }
+
+    public function testIndexListsLocationsWithoutUsableCoordinatesLast(): void
+    {
+        $near = $this->location('Zulu', '6.53', '3.39');
+        $blank = $this->location('Bravo', '', '3.38');
+        $comma = $this->location('Alpha', '6,52', '3,38');
+        $outOfRange = $this->location('Charlie', '95', '3.38');
+        $far = $this->location('Mike', '6.9', '3.38');
+
+        $ordered = $this->indexLocations([$blank, $far, $comma, $outOfRange, $near], ['lat' => '6.52', 'lon' => '3.38']);
+
+        static::assertSame([$near, $far, $comma, $blank, $outOfRange], $ordered);
+    }
+
+    public function testIndexOrdersEqualDistanceByName(): void
+    {
+        $bravo = $this->location('Bravo', '6.53', '3.39');
+        $alpha = $this->location('Alpha', '6.53', '3.39');
+
+        static::assertSame([$alpha, $bravo], $this->indexLocations([$bravo, $alpha], ['lat' => '6.52', 'lon' => '3.38']));
+    }
+
+    /**
+     * @param array<string, string> $query
+     */
+    #[DataProvider('ignoredCoordinatesProvider')]
+    public function testIndexIgnoresInvalidCoordinates(array $query): void
+    {
+        $near = $this->location('Zulu', '6.53', '3.39');
+        $far = $this->location('Alpha', '6.9', '3.38');
+
+        static::assertSame([$far, $near], $this->indexLocations([$near, $far], $query));
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>}>
+     */
+    public static function ignoredCoordinatesProvider(): iterable
+    {
+        yield 'latitude out of range' => [['lat' => '95', 'lon' => '3.38']];
+        yield 'longitude out of range' => [['lat' => '6.52', 'lon' => '-180.5']];
+        yield 'missing longitude' => [['lat' => '6.52']];
+        yield 'missing latitude' => [['lon' => '3.38']];
+        yield 'non-numeric' => [['lat' => 'north', 'lon' => '3.38']];
+        yield 'empty' => [['lat' => '', 'lon' => '']];
+    }
+
+    public function testIndexIgnoresCoordinatesWhenGeolocationSortingIsDisabled(): void
+    {
+        $systemConfigService = $this->createMock(SystemConfigService::class);
+        $systemConfigService->method('getBool')->willReturnMap([
+            ['KmhClickAndPickSW.config.enablePickupLocationSelection', 'sales-channel-id', true],
+            ['KmhClickAndPickSW.config.enableGeolocationSorting', 'sales-channel-id', false],
+        ]);
+        $this->controller = new TestSalesChannelPickupLocationController(
+            $this->repository,
+            $this->availabilityService,
+            $this->slotService,
+            $systemConfigService
+        );
+
+        $near = $this->location('Zulu', '6.53', '3.39');
+        $far = $this->location('Alpha', '6.9', '3.38');
+
+        static::assertSame([$far, $near], $this->indexLocations([$near, $far], ['lat' => '6.52', 'lon' => '3.38']));
     }
 
     public function testSlotsRendersSlotsForValidDate(): void
@@ -293,6 +389,38 @@ class SalesChannelPickupLocationControllerTest extends TestCase
 
         static::assertSame(200, $response->getStatusCode());
         static::assertSame([], $this->controller->lastParameters['slots']);
+    }
+
+    /**
+     * @param list<PickupLocationEntity> $locations
+     * @param array<string, string> $query
+     *
+     * @return list<PickupLocationEntity>
+     */
+    private function indexLocations(array $locations, array $query): array
+    {
+        $searchResult = $this->createMock(EntitySearchResult::class);
+        $searchResult->method('getEntities')->willReturn(new PickupLocationCollection($locations));
+        $this->repository->method('search')->willReturn($searchResult);
+        $this->availabilityService->method('filterOpenOnDate')->willReturnArgument(0);
+
+        $this->controller->index('sales-channel-id', new Request($query), $this->salesChannelContext());
+
+        /** @var list<PickupLocationEntity> $ordered */
+        $ordered = $this->controller->lastParameters['locations'];
+
+        return $ordered;
+    }
+
+    private function location(string $name, ?string $latitude, ?string $longitude): PickupLocationEntity
+    {
+        $location = new PickupLocationEntity();
+        $location->setId(md5($name));
+        $location->setName($name);
+        $location->setLatitude($latitude);
+        $location->setLongitude($longitude);
+
+        return $location;
     }
 
     private function salesChannelContext(): SalesChannelContext

@@ -42,6 +42,14 @@
         "noSlots": "No pickup times available on this date.",
         "commentLabel": "Notes for the pickup location",
         "commentPlaceholder": "Optional instructions (e.g. arrival time, order details)"
+      },
+      "cookie": {
+        "geolocationName": "Pickup location by distance",
+        "geolocationDescription": "Lets you share your approximate location in checkout so the nearest pickup locations are listed first. Your location is rounded, used once and never stored."
+      },
+      "geolocation": {
+        "useMyLocation": "Use my location",
+        "locationUnavailable": "Your location could not be determined. The pickup locations are shown in their usual order."
       }
     }
   }

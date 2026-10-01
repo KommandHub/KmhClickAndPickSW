@@ -42,6 +42,14 @@
         "noSlots": "Aucune heure de retrait disponible à cette date.",
         "commentLabel": "Remarques pour le lieu de retrait",
         "commentPlaceholder": "Instructions facultatives (par ex. heure d'arrivée, détails de la commande)"
+      },
+      "cookie": {
+        "geolocationName": "Lieux de ramassage par distance",
+        "geolocationDescription": "Permet de partager votre position approximative lors du passage à la caisse afin d’afficher en premier les lieux de ramassage les plus proches. Votre position est arrondie, utilisée une seule fois et jamais enregistrée."
+      },
+      "geolocation": {
+        "useMyLocation": "Utiliser ma position",
+        "locationUnavailable": "Votre position n’a pas pu être déterminée. Les lieux de ramassage sont affichés dans l’ordre habituel."
       }
     }
   }
