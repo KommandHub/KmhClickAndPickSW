@@ -143,7 +143,7 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
     }
 
     /**
-     * @return array{subject: string|null, senderName: string|null, recipients: array<string, string>, salesChannelId: string|null, mailTemplateData: array<string, mixed>, contentHtml: string|null, contentPlain: string|null, attachmentsConfig: MailAttachmentsConfig, senderEmail?: string, mediaIds?: list<string>, attachments?: list<mixed>, documentIds?: list<string>}
+     * @return array{subject: string, senderName: string|null, recipients: array<string, string>, salesChannelId: string, mailTemplateData: array<string, mixed>, contentHtml: string, contentPlain: string, attachmentsConfig: MailAttachmentsConfig, senderEmail?: string, mediaIds?: list<string>, attachments?: list<mixed>, documentIds?: list<string>}
      */
     private function buildMailData(
         MailTemplateEntity $template,
@@ -155,20 +155,23 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
         Context $context
     ): array {
         $data = [
-            'subject' => $template->getSubject(),
+            // AbstractMailService::send() requires non-null subject/content/sales
+            // channel; the template always carries them, so empty-string fallbacks
+            // are unreachable guards that satisfy the stricter signature.
+            'subject' => $template->getSubject() ?? '',
             'senderName' => $template->getSenderName(),
             'recipients' => [
                 $recipientEmail => $pickupLocation->getName(),
             ],
-            'salesChannelId' => $order->getSalesChannelId(),
+            'salesChannelId' => (string)$order->getSalesChannelId(),
             'mailTemplateData' => [
                 'order' => $order,
                 'customer' => $order->getOrderCustomer(),
                 'pickupLocation' => $pickupLocation,
                 'pickupOrderLocation' => $pickupOrderLocation,
             ],
-            'contentHtml' => $template->getContentHtml(),
-            'contentPlain' => $template->getContentPlain(),
+            'contentHtml' => $template->getContentHtml() ?? '',
+            'contentPlain' => $template->getContentPlain() ?? '',
             'attachmentsConfig' => new MailAttachmentsConfig(
                 $context,
                 $template,
