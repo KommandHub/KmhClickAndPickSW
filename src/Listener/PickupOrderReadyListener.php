@@ -7,11 +7,11 @@ namespace Kommandhub\ClickAndPickSW\Listener;
 use Kommandhub\ClickAndPickSW\Entity\Order\Aggregated\OrderDelivery\OrderDeliveryStates;
 use Kommandhub\ClickAndPickSW\Entity\OrderPickupLocation\OrderPickupLocationEntity;
 use Kommandhub\ClickAndPickSW\Event\PickupOrderReadyEvent;
-use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -28,7 +28,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 readonly class PickupOrderReadyListener
 {
     public function __construct(
-        private EntityRepository $orderDeliveryRepository,
+        private EntityRepository $orderRepository,
         private EventDispatcherInterface $eventDispatcher,
     ) {
     }
@@ -68,13 +68,18 @@ readonly class PickupOrderReadyListener
 
     private function loadOrder(string $orderDeliveryId, Context $context): ?OrderEntity
     {
-        $criteria = new Criteria([$orderDeliveryId]);
-        $criteria->addAssociation('order.orderCustomer');
-        $criteria->addAssociation('order.kmhPickupLocation.pickupLocation');
+        // Load from the order root so the autoloaded `kmhPickupLocation` extension
+        // hydrates — it does not when the order is a nested association under
+        // order_delivery, which left the pickup record empty and the mail unsent.
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('deliveries.id', $orderDeliveryId));
+        $criteria->addAssociation('orderCustomer');
+        $criteria->addAssociation('kmhPickupLocation.pickupLocation');
+        $criteria->setLimit(1);
 
-        $delivery = $this->orderDeliveryRepository->search($criteria, $context)->getEntities()->first();
+        $order = $this->orderRepository->search($criteria, $context)->getEntities()->first();
 
-        return $delivery instanceof OrderDeliveryEntity ? $delivery->getOrder() : null;
+        return $order instanceof OrderEntity ? $order : null;
     }
 
     private function resolvePickupRecord(OrderEntity $order): ?OrderPickupLocationEntity

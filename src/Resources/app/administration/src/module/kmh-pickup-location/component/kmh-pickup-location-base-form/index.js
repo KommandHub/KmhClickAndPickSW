@@ -21,7 +21,7 @@ export default {
     },
 
     computed: {
-        ...mapPropertyErrors('pickupLocation', ['name', 'street', 'city', 'email', 'postalCode', 'salesChannelIds']),
+        ...mapPropertyErrors('pickupLocation', ['name', 'street', 'city', 'email', 'postalCode', 'salesChannelIds', 'defaultSalesChannelId']),
 
         salesChannelRepository() {
             return this.repositoryFactory.create('sales_channel');

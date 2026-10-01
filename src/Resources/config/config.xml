@@ -11,10 +11,11 @@
             <label>Enable pickup location selection</label>
             <label lang="de-DE">Abholort auswählen</label>
             <label lang="fr-FR">Activer la sélection du lieu de ramassage</label>
-            <help-text>Enable or disable the pickup location selection during checkout.</help-text>
-            <help-text lang="de-DE">Aktivieren oder deaktivieren Sie die Auswahl des Abholortes während des Checkouts.</help-text>
-            <help-text lang="fr-FR">Activer ou désactiver la sélection du lieu de ramassage lors du passage à la caisse.</help-text>
+            <help-text>Enable or disable the pickup location selection during checkout. When disabled, the default pickup location will be automatically selected and locked.</help-text>
+            <help-text lang="de-DE">Aktivieren oder deaktivieren Sie die Auswahl des Abholortes während des Checkouts. Wenn deaktiviert, wird der Standard-Abholort automatisch ausgewählt und gesperrt.</help-text>
+            <help-text lang="fr-FR">Activer ou désactiver la sélection du lieu de ramassage lors du passage à la caisse. Lorsque désactivé, le lieu de ramassage par défaut sera automatiquement sélectionné et verrouillé.</help-text>
             <default-value>true</default-value>
+            <salesChannelScope>true</salesChannelScope>
         </input-field>
 
         <input-field type="bool">

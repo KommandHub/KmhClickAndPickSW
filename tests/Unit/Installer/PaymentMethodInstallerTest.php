@@ -25,6 +25,8 @@ class PaymentMethodInstallerTest extends TestCase
 
     private PluginIdProvider&MockObject $pluginIdProvider;
 
+    private EntityRepository&MockObject $salesChannelRepository;
+
     private PaymentMethodInstaller $installer;
 
     private Context $context;
@@ -33,8 +35,48 @@ class PaymentMethodInstallerTest extends TestCase
     {
         $this->paymentMethodRepository = $this->createMock(EntityRepository::class);
         $this->pluginIdProvider = $this->createMock(PluginIdProvider::class);
-        $this->installer = new PaymentMethodInstaller($this->paymentMethodRepository, $this->pluginIdProvider);
+        $this->salesChannelRepository = $this->createMock(EntityRepository::class);
+        $this->installer = new PaymentMethodInstaller(
+            $this->paymentMethodRepository,
+            $this->pluginIdProvider,
+            $this->salesChannelRepository
+        );
         $this->context = Context::createDefaultContext();
+    }
+
+    public function testAssignToSalesChannelsLinksMethodToEverySalesChannel(): void
+    {
+        $this->paymentMethodRepository
+            ->expects(static::once())
+            ->method('searchIds')
+            ->willReturn(IdSearchResult::fromIds(['payment-id'], new Criteria(), $this->context));
+        $this->salesChannelRepository
+            ->expects(static::once())
+            ->method('searchIds')
+            ->willReturn(IdSearchResult::fromIds(['sales-channel-1'], new Criteria(), $this->context));
+        $this->salesChannelRepository
+            ->expects(static::once())
+            ->method('update')
+            ->with(
+                [['id' => 'sales-channel-1', 'paymentMethods' => [['id' => 'payment-id']]]],
+                $this->context
+            );
+
+        $this->installer->assignToSalesChannels($this->context);
+    }
+
+    public function testAssignToSalesChannelsDoesNothingWhenMethodMissing(): void
+    {
+        $this->paymentMethodRepository
+            ->expects(static::exactly(2))
+            ->method('searchIds')
+            ->willReturnOnConsecutiveCalls(
+                IdSearchResult::fromIds([], new Criteria(), $this->context),
+                IdSearchResult::fromIds([], new Criteria(), $this->context)
+            );
+        $this->salesChannelRepository->expects(static::never())->method('update');
+
+        $this->installer->assignToSalesChannels($this->context);
     }
 
     public function testInstallUpdatesExistingPaymentMethodByTechnicalName(): void

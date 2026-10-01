@@ -9,6 +9,7 @@ use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationSpec
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Shopware\Core\System\SalesChannel\SalesChannelCollection;
+use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 class PickupLocationEntity extends Entity
 {
@@ -28,9 +29,11 @@ class PickupLocationEntity extends Entity
     protected ?string $longitude = null;
     protected bool $active;
     protected ?string $locationCode = null;
+    protected string $defaultSalesChannelId;
     protected ?\DateTimeInterface $createdAt = null;
     protected ?\DateTimeInterface $updatedAt = null;
     protected ?SalesChannelCollection $salesChannels = null;
+    protected ?SalesChannelEntity $defaultSalesChannel = null;
     protected ?PickupLocationOpeningHourCollection $openingHoursSchedule = null;
     protected ?PickupLocationSpecialHourCollection $specialHours = null;
 
@@ -222,5 +225,25 @@ class PickupLocationEntity extends Entity
     public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    public function getDefaultSalesChannelId(): string
+    {
+        return $this->defaultSalesChannelId;
+    }
+
+    public function setDefaultSalesChannelId(string $defaultSalesChannelId): void
+    {
+        $this->defaultSalesChannelId = $defaultSalesChannelId;
+    }
+
+    public function getDefaultSalesChannel(): ?SalesChannelEntity
+    {
+        return $this->defaultSalesChannel;
+    }
+
+    public function setDefaultSalesChannel(?SalesChannelEntity $defaultSalesChannel): void
+    {
+        $this->defaultSalesChannel = $defaultSalesChannel;
     }
 }

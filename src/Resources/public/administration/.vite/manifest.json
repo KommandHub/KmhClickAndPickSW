@@ -1,6 +1,6 @@
 {
   "main.js": {
-    "file": "assets/kmh-click-and-pick-s-w-CsxXafJR.js",
+    "file": "assets/kmh-click-and-pick-s-w-BL3wpqbL.js",
     "name": "kmh-click-and-pick-s-w",
     "src": "main.js",
     "isEntry": true,
@@ -13,7 +13,7 @@
     ]
   },
   "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js": {
-    "file": "assets/index-65Hn7opQ.js",
+    "file": "assets/index-D1zdhIYY.js",
     "name": "index",
     "src": "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js",
     "isDynamicEntry": true,
@@ -22,7 +22,7 @@
     ]
   },
   "module/kmh-pickup-location/component/kmh-pickup-location-base-form/index.js": {
-    "file": "assets/index-6Fv89vMn.js",
+    "file": "assets/index-K27ZqU86.js",
     "name": "index",
     "src": "module/kmh-pickup-location/component/kmh-pickup-location-base-form/index.js",
     "isDynamicEntry": true
@@ -37,7 +37,7 @@
     ]
   },
   "module/kmh-pickup-location/page/kmh-pickup-location-create/index.js": {
-    "file": "assets/index-CynGncVI.js",
+    "file": "assets/index-B62MuYUK.js",
     "name": "index",
     "src": "module/kmh-pickup-location/page/kmh-pickup-location-create/index.js",
     "isDynamicEntry": true

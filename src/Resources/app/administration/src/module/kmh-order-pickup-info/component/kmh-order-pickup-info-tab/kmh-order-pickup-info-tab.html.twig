@@ -78,7 +78,7 @@
             <dl class="kmh-order-pickup-info__list">
                 <div class="kmh-order-pickup-info__row">
                     <dt>{{ $tc('kmh-order-pickup-info.appointment.pickupTime') }}</dt>
-                    <dd v-if="pickupView.pickupTime">{{ formatDateTime(pickupView.pickupTime) }}</dd>
+                    <dd v-if="pickupView.pickupTime">{{ formatDateTime(pickupView.pickupTime, pickupView.location && pickupView.location.timezone) }}</dd>
                     <dd v-else class="kmh-order-pickup-info__muted">
                         {{ $tc('kmh-order-pickup-info.appointment.pickupTimeEmpty') }}
                     </dd>

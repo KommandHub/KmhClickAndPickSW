@@ -26,6 +26,8 @@ class ShippingMethodInstallerTest extends TestCase
 
     private EntityRepository&MockObject $ruleRepository;
 
+    private EntityRepository&MockObject $salesChannelRepository;
+
     private ShippingMethodInstaller $installer;
 
     private Context $context;
@@ -35,12 +37,49 @@ class ShippingMethodInstallerTest extends TestCase
         $this->shippingMethodRepository = $this->createMock(EntityRepository::class);
         $this->deliveryTimeRepository = $this->createMock(EntityRepository::class);
         $this->ruleRepository = $this->createMock(EntityRepository::class);
+        $this->salesChannelRepository = $this->createMock(EntityRepository::class);
         $this->installer = new ShippingMethodInstaller(
             $this->shippingMethodRepository,
             $this->deliveryTimeRepository,
-            $this->ruleRepository
+            $this->ruleRepository,
+            $this->salesChannelRepository
         );
         $this->context = Context::createDefaultContext();
+    }
+
+    public function testAssignToSalesChannelsLinksMethodToEverySalesChannel(): void
+    {
+        $this->shippingMethodRepository
+            ->expects(static::once())
+            ->method('searchIds')
+            ->willReturn(IdSearchResult::fromIds([KmhClickAndPickSW::SHIPPING_METHOD_ID], new Criteria(), $this->context));
+        $this->salesChannelRepository
+            ->expects(static::once())
+            ->method('searchIds')
+            ->willReturn(IdSearchResult::fromIds(['sales-channel-1', 'sales-channel-2'], new Criteria(), $this->context));
+        $this->salesChannelRepository
+            ->expects(static::once())
+            ->method('update')
+            ->with(
+                [
+                    ['id' => 'sales-channel-1', 'shippingMethods' => [['id' => KmhClickAndPickSW::SHIPPING_METHOD_ID]]],
+                    ['id' => 'sales-channel-2', 'shippingMethods' => [['id' => KmhClickAndPickSW::SHIPPING_METHOD_ID]]],
+                ],
+                $this->context
+            );
+
+        $this->installer->assignToSalesChannels($this->context);
+    }
+
+    public function testAssignToSalesChannelsDoesNothingWhenMethodMissing(): void
+    {
+        $this->shippingMethodRepository
+            ->expects(static::once())
+            ->method('searchIds')
+            ->willReturn(IdSearchResult::fromIds([], new Criteria(), $this->context));
+        $this->salesChannelRepository->expects(static::never())->method('update');
+
+        $this->installer->assignToSalesChannels($this->context);
     }
 
     public function testInstallDoesNothingWhenShippingMethodAlreadyExists(): void

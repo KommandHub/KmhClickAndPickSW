@@ -61,6 +61,7 @@ export default {
         defaultCriteria() {
             const criteria = new Criteria(1, 1);
             criteria.addAssociation('salesChannels');
+            criteria.addAssociation('defaultSalesChannel');
             criteria.addAssociation('openingHoursSchedule');
             criteria.addAssociation('specialHours');
             return criteria;

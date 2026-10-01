@@ -27,6 +27,7 @@ readonly class ShippingMethodInstaller
         private EntityRepository $shippingMethodRepository,
         private EntityRepository $deliveryTimeRepository,
         private EntityRepository $ruleRepository,
+        private EntityRepository $salesChannelRepository,
     ) {
     }
 
@@ -66,6 +67,32 @@ readonly class ShippingMethodInstaller
                 ],
             ],
         ], $context);
+    }
+
+    /**
+     * Link the shipping method to every sales channel so it is actually offered —
+     * a method not attached to a channel is never selectable. The DAL many-to-many
+     * upsert makes re-adding an existing mapping a no-op.
+     */
+    public function assignToSalesChannels(Context $context): void
+    {
+        if (!$this->shippingMethodExists($context)) {
+            return;
+        }
+
+        $salesChannelIds = $this->salesChannelRepository->searchIds(new Criteria(), $context)->getIds();
+
+        $payload = array_map(
+            static fn (string $salesChannelId): array => [
+                'id' => $salesChannelId,
+                'shippingMethods' => [['id' => KmhClickAndPickSW::SHIPPING_METHOD_ID]],
+            ],
+            $salesChannelIds
+        );
+
+        if ($payload !== []) {
+            $this->salesChannelRepository->update($payload, $context);
+        }
     }
 
     public function activate(Context $context): void

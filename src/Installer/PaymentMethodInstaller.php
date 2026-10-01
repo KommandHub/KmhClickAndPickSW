@@ -32,6 +32,7 @@ readonly class PaymentMethodInstaller
     public function __construct(
         private EntityRepository $paymentMethodRepository,
         private PluginIdProvider $pluginIdProvider,
+        private EntityRepository $salesChannelRepository,
     ) {
     }
 
@@ -83,6 +84,35 @@ readonly class PaymentMethodInstaller
                 ],
             ],
         ], $context);
+    }
+
+    /**
+     * Link the payment method to every sales channel so it is actually offered —
+     * an active method not attached to a channel is never selectable (this was the
+     * case for "Pay on pickup"). The DAL many-to-many upsert makes re-adding an
+     * existing mapping a no-op.
+     */
+    public function assignToSalesChannels(Context $context): void
+    {
+        $paymentId = $this->getPaymentMethodId($context);
+
+        if ($paymentId === null) {
+            return;
+        }
+
+        $salesChannelIds = $this->salesChannelRepository->searchIds(new Criteria(), $context)->getIds();
+
+        $payload = array_map(
+            static fn (string $salesChannelId): array => [
+                'id' => $salesChannelId,
+                'paymentMethods' => [['id' => $paymentId]],
+            ],
+            $salesChannelIds
+        );
+
+        if ($payload !== []) {
+            $this->salesChannelRepository->update($payload, $context);
+        }
     }
 
     public function activate(Context $context): void

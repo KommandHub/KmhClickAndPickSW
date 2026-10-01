@@ -7,6 +7,7 @@
     {% block component_shipping_method_label_kmh_self_pickup %}
         {% if shipping.technicalName is same as('kmh_self_pickup')%}
             {% block component_shipping_method_label_kmh_self_pickup_inner %}
+            {% set enableSelection = config('KmhClickAndPickSW.config.enablePickupLocationSelection') %}
             {% set salesChannelPickupLocationOptions = {
                 url: path("frontend.kmh.sales-channel.pickup-locations.index", { salesChannelId: context.salesChannel.id }),
                 selectedPickupLocationId: context.extensions.pickupLocation.id
@@ -23,7 +24,8 @@
                 {% block component_shipping_method_label_kmh_self_pickup_location_field %}
                     <select id="pickup-location-location-field-id"
                             name="pickupLocationId"
-                            class="form-control shipping-method-input">
+                            class="form-control shipping-method-input"
+                            {% if not enableSelection %}disabled{% endif %}>
                     </select>
                 {% endblock %}
 

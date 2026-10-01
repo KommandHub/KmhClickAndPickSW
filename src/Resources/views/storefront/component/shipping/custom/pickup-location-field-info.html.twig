@@ -162,7 +162,8 @@
                                 {% if pickupTime %}
                                     <div class="pickup-location-card__row">
                                         <span class="pickup-location-card__label">{{ "general.kmh-click-and-pick.locationInfoFields.pickupTime" | trans }}:</span>
-                                        <span>{{ pickupTime|format_datetime('medium', 'short', locale=app.request.locale) }}</span>
+                                        {# Show the time in the location's own timezone, not the shop display tz. #}
+                                        <span>{{ pickupTime|format_datetime('medium', 'short', locale=app.request.locale, timezone=location.timezone|default('UTC')) }}</span>
                                     </div>
                                 {% endif %}
                                 {% if pickupComment %}

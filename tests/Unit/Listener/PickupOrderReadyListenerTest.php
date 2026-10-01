@@ -13,8 +13,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
+use Shopware\Core\Checkout\Order\OrderCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -32,16 +31,16 @@ class PickupOrderReadyListenerTest extends TestCase
     private const LOCATION_ID = 'fedcba9876543210fedcba9876543210';
     private const DELIVERY_ID = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
-    private EntityRepository&MockObject $orderDeliveryRepository;
+    private EntityRepository&MockObject $orderRepository;
     private EventDispatcherInterface&MockObject $eventDispatcher;
     private PickupOrderReadyListener $listener;
 
     protected function setUp(): void
     {
-        $this->orderDeliveryRepository = $this->createMock(EntityRepository::class);
+        $this->orderRepository = $this->createMock(EntityRepository::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
-        $this->listener = new PickupOrderReadyListener($this->orderDeliveryRepository, $this->eventDispatcher);
+        $this->listener = new PickupOrderReadyListener($this->orderRepository, $this->eventDispatcher);
     }
 
     public function testDispatchesForPickupOrderEnteringReady(): void
@@ -50,7 +49,7 @@ class PickupOrderReadyListenerTest extends TestCase
         $location->setId(self::LOCATION_ID);
         $order = $this->orderWithPickup($location);
 
-        $this->orderDeliveryRepository->method('search')->willReturn($this->deliveryResult($order));
+        $this->orderRepository->method('search')->willReturn($this->orderResult($order));
 
         $this->eventDispatcher
             ->expects(static::once())
@@ -74,7 +73,7 @@ class PickupOrderReadyListenerTest extends TestCase
         $order = new OrderEntity();
         $order->setId(self::ORDER_ID);
 
-        $this->orderDeliveryRepository->method('search')->willReturn($this->deliveryResult($order));
+        $this->orderRepository->method('search')->willReturn($this->orderResult($order));
         $this->eventDispatcher->expects(static::never())->method('dispatch');
 
         $this->listener->onOrderDeliveryStateChanged($this->readyEnterEvent());
@@ -85,15 +84,15 @@ class PickupOrderReadyListenerTest extends TestCase
         // Pickup record exists but its location was removed (FK set null).
         $order = $this->orderWithPickup(null);
 
-        $this->orderDeliveryRepository->method('search')->willReturn($this->deliveryResult($order));
+        $this->orderRepository->method('search')->willReturn($this->orderResult($order));
         $this->eventDispatcher->expects(static::never())->method('dispatch');
 
         $this->listener->onOrderDeliveryStateChanged($this->readyEnterEvent());
     }
 
-    public function testDoesNotDispatchWhenDeliveryCannotBeResolved(): void
+    public function testDoesNotDispatchWhenOrderCannotBeResolved(): void
     {
-        $this->orderDeliveryRepository->method('search')->willReturn($this->deliveryResult(null));
+        $this->orderRepository->method('search')->willReturn($this->orderResult(null));
         $this->eventDispatcher->expects(static::never())->method('dispatch');
 
         $this->listener->onOrderDeliveryStateChanged($this->readyEnterEvent());
@@ -101,7 +100,7 @@ class PickupOrderReadyListenerTest extends TestCase
 
     public function testDoesNotDispatchOnLeaveSide(): void
     {
-        $this->orderDeliveryRepository->expects(static::never())->method('search');
+        $this->orderRepository->expects(static::never())->method('search');
         $this->eventDispatcher->expects(static::never())->method('dispatch');
 
         $this->listener->onOrderDeliveryStateChanged($this->stateChangeEvent(
@@ -112,7 +111,7 @@ class PickupOrderReadyListenerTest extends TestCase
 
     public function testDoesNotDispatchForUnrelatedState(): void
     {
-        $this->orderDeliveryRepository->expects(static::never())->method('search');
+        $this->orderRepository->expects(static::never())->method('search');
         $this->eventDispatcher->expects(static::never())->method('dispatch');
 
         $this->listener->onOrderDeliveryStateChanged($this->stateChangeEvent(
@@ -160,17 +159,9 @@ class PickupOrderReadyListenerTest extends TestCase
         return $event;
     }
 
-    private function deliveryResult(?OrderEntity $order): EntitySearchResult&MockObject
+    private function orderResult(?OrderEntity $order): EntitySearchResult&MockObject
     {
-        $delivery = null;
-
-        if ($order !== null) {
-            $delivery = new OrderDeliveryEntity();
-            $delivery->setId(self::DELIVERY_ID);
-            $delivery->setOrder($order);
-        }
-
-        $collection = new OrderDeliveryCollection($delivery !== null ? [$delivery] : []);
+        $collection = new OrderCollection($order !== null ? [$order] : []);
 
         $result = $this->createMock(EntitySearchResult::class);
         $result->method('getEntities')->willReturn($collection);

@@ -12,6 +12,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Storefront\Framework\Routing\StorefrontRouteScope;
@@ -25,6 +26,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         private readonly EntityRepository $kmhPickupLocationRepository,
         private readonly PickupLocationAvailabilityService $availabilityService,
         private readonly PickupTimeSlotService $slotService,
+        private readonly SystemConfigService $systemConfigService,
     ) {
     }
 
@@ -36,6 +38,11 @@ class SalesChannelPickupLocationController extends StorefrontController
     )]
     public function index(string $salesChannelId, SalesChannelContext $context): Response
     {
+        $enableSelection = $this->systemConfigService->getBool(
+            'KmhClickAndPickSW.config.enablePickupLocationSelection',
+            $salesChannelId
+        );
+
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('active', true));
         // The sales-channel assignment is a filter only — the DAL joins the
@@ -51,6 +58,11 @@ class SalesChannelPickupLocationController extends StorefrontController
         $criteria->addAssociation('openingHoursSchedule');
         $criteria->addAssociation('specialHours');
 
+        // When customer selection is disabled, only load the default location
+        if (!$enableSelection) {
+            $criteria->addFilter(new EqualsFilter('defaultSalesChannelId', $salesChannelId));
+        }
+
         /** @var list<\Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity> $locations */
         $locations = array_values($this->kmhPickupLocationRepository
             ->search($criteria, $context->getContext())
@@ -64,7 +76,10 @@ class SalesChannelPickupLocationController extends StorefrontController
 
         return $this->renderStorefront(
             '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',
-            ['locations' => $openLocations]
+            [
+                'locations' => $openLocations,
+                'selectionDisabled' => !$enableSelection,
+            ]
         );
     }
 

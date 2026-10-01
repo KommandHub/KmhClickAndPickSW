@@ -72,7 +72,7 @@ export default {
             }
         },
 
-        formatDateTime(value) {
+        formatDateTime(value, timeZone) {
             if (!value) {
                 return '';
             }
@@ -83,6 +83,9 @@ export default {
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
+                // Pickup time belongs to the location's timezone, not the admin
+                // user's. Falls back to the user tz when the location was deleted.
+                ...(timeZone ? { timeZone } : {}),
             });
         },
     },
