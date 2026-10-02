@@ -2,7 +2,7 @@
 
 **For AI coding assistants working on `KmhClickAndPickSW`**
 
-This document provides essential context for AI agents (Claude, Cursor, GitHub Copilot, etc.) working on the Click and Pick plugin for Shopware 6. It supplements the technical README.md with architecture patterns, coding conventions, and navigation shortcuts.
+This document provides essential context for AI agents (Claude, Cursor, GitHub Copilot, etc.) working on the Click and Pick plugin for Shopware 6. It supplements the technical documentation at https://docs.kommandhub.com/plugins/click-and-pick/ (architecture, technical reference, extending, development & testing) with coding conventions and navigation shortcuts.
 
 ---
 
@@ -512,7 +512,7 @@ public function getSlots(
 
 ## When in Doubt
 
-1. **Check README.md** for architecture deep-dives
+1. **Check the online docs** (https://docs.kommandhub.com/plugins/click-and-pick/developer) for architecture deep-dives
 2. **Run tests** to verify behavior: `make test FILTER=YourTest`
 3. **Check PHPStan** for type errors: `make analyse`
 4. **Rebuild assets** after JS/Twig changes: `bin/build-administration.sh && bin/build-storefront.sh`
