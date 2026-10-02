@@ -65,7 +65,7 @@ class SalesChannelPickupLocationController extends StorefrontController
             $criteria->addFilter(new EqualsFilter('defaultSalesChannelId', $salesChannelId));
         }
 
-        /** @var list<\Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity> $locations */
+        /** @var list<PickupLocationEntity> $locations */
         $locations = array_values($this->kmhPickupLocationRepository
             ->search($criteria, $context->getContext())
             ->getEntities()
@@ -110,7 +110,7 @@ class SalesChannelPickupLocationController extends StorefrontController
         $location = $this->kmhPickupLocationRepository->search(
             $criteria,
             $salesChannelContext->getContext()
-        )->first();
+        )->getEntities()->first();
 
         // Build the requested day at midnight in the location's own timezone so
         // it maps to the intended calendar day for any offset. An unknown
