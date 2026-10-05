@@ -1,30 +1,30 @@
-{% block kommandhub_pickup_notify_modal %}
+{% block kmh_pickup_notify_modal %}
 <sw-modal
-    class="kommandhub-pickup-notify-modal"
-    :title="$tc('kommandhub-pickup-notify-action.titleSendNotification')"
+    class="kmh-pickup-notify-modal"
+    :title="$tc('kmh-pickup-notify-action.titleSendNotification')"
     @modal-close="onClose"
 >
-    {% block kommandhub_pickup_notify_modal_content %}
+    {% block kmh_pickup_notify_modal_content %}
         <sw-entity-single-select
-            class="kommandhub-pickup-notify-modal__mail-template"
+            class="kmh-pickup-notify-modal__mail-template"
             entity="mail_template"
             :value="mailTemplateId"
             :criteria="mailTemplateCriteria"
-            :label="$tc('kommandhub-pickup-notify-action.labelMailTemplate')"
-            :placeholder="$tc('kommandhub-pickup-notify-action.placeholderMailTemplate')"
+            :label="$tc('kmh-pickup-notify-action.labelMailTemplate')"
+            :placeholder="$tc('kmh-pickup-notify-action.placeholderMailTemplate')"
             show-clearable-button
             @change="onMailTemplateChange"
         />
 
-        <p class="kommandhub-pickup-notify-modal__hint">
-            {{ $tc('kommandhub-pickup-notify-action.mailTemplateHint') }}
+        <p class="kmh-pickup-notify-modal__hint">
+            {{ $tc('kmh-pickup-notify-action.mailTemplateHint') }}
         </p>
     {% endblock %}
 
-    {% block kommandhub_pickup_notify_modal_footer %}
+    {% block kmh_pickup_notify_modal_footer %}
         <template #modal-footer>
             <sw-button
-                class="kommandhub-pickup-notify-modal__cancel-button"
+                class="kmh-pickup-notify-modal__cancel-button"
                 size="small"
                 @click="onClose"
             >
@@ -32,12 +32,12 @@
             </sw-button>
 
             <sw-button
-                class="kommandhub-pickup-notify-modal__save-button"
+                class="kmh-pickup-notify-modal__save-button"
                 variant="primary"
                 size="small"
                 @click="onAddAction"
             >
-                {{ $tc('kommandhub-pickup-notify-action.buttonSaveAction') }}
+                {{ $tc('kmh-pickup-notify-action.buttonSaveAction') }}
             </sw-button>
         </template>
     {% endblock %}

@@ -11,10 +11,11 @@
             <label>Enable pickup location selection</label>
             <label lang="de-DE">Abholort auswählen</label>
             <label lang="fr-FR">Activer la sélection du lieu de ramassage</label>
-            <help-text>Enable or disable the pickup location selection during checkout.</help-text>
-            <help-text lang="de-DE">Aktivieren oder deaktivieren Sie die Auswahl des Abholortes während des Checkouts.</help-text>
-            <help-text lang="fr-FR">Activer ou désactiver la sélection du lieu de ramassage lors du passage à la caisse.</help-text>
+            <help-text>Enable or disable the pickup location selection during checkout. When disabled, the default pickup location will be automatically selected and locked.</help-text>
+            <help-text lang="de-DE">Aktivieren oder deaktivieren Sie die Auswahl des Abholortes während des Checkouts. Wenn deaktiviert, wird der Standard-Abholort automatisch ausgewählt und gesperrt.</help-text>
+            <help-text lang="fr-FR">Activer ou désactiver la sélection du lieu de ramassage lors du passage à la caisse. Lorsque désactivé, le lieu de ramassage par défaut sera automatiquement sélectionné et verrouillé.</help-text>
             <default-value>true</default-value>
+            <salesChannelScope>true</salesChannelScope>
         </input-field>
 
         <input-field type="bool">
@@ -37,6 +38,18 @@
             <help-text lang="de-DE">Kontaktdetails in den Informationen zum Abholort während des Checkouts anzeigen oder ausblenden.</help-text>
             <help-text lang="fr-FR">Afficher ou masquer les coordonnées dans les informations sur le lieu de ramassage lors du passage à la caisse.</help-text>
             <default-value>true</default-value>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableGeolocationSorting</name>
+            <label>Enable sorting pickup locations by distance</label>
+            <label lang="de-DE">Sortierung der Abholorte nach Entfernung aktivieren</label>
+            <label lang="fr-FR">Activer le tri des lieux de ramassage par distance</label>
+            <help-text>Show a "Use my location" button in checkout. Customers who accepted the geolocation cookie group can use it to list the nearest pickup locations first. Coordinates are rounded and never stored.</help-text>
+            <help-text lang="de-DE">Zeigt im Checkout eine Schaltfläche „Meinen Standort verwenden“. Kunden, die der Cookie-Gruppe für Standortdaten zugestimmt haben, sehen damit die nächstgelegenen Abholorte zuerst. Koordinaten werden gerundet und nie gespeichert.</help-text>
+            <help-text lang="fr-FR">Affiche un bouton « Utiliser ma position » lors du passage à la caisse. Les clients ayant accepté le groupe de cookies de géolocalisation voient alors les lieux de ramassage les plus proches en premier. Les coordonnées sont arrondies et jamais enregistrées.</help-text>
+            <default-value>true</default-value>
+            <salesChannelScope>true</salesChannelScope>
         </input-field>
 
     </card>

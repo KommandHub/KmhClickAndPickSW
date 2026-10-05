@@ -8,7 +8,7 @@ use Shopware\Core\Checkout\Cart\Error\Error;
 
 final class InvalidPickupTimeCartBlockerError extends Error
 {
-    private const KEY = 'kommandhub-click-and-pick.invalidPickupTime';
+    private const KEY = 'kmh-click-and-pick.invalidPickupTime';
 
     public function __construct()
     {

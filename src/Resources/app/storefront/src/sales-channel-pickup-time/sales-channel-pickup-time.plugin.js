@@ -55,9 +55,9 @@ export default class SalesChannelPickupTimePlugin extends PluginBaseClass {
         const isoDate = (this.options.selectedPickupTime || '').slice(0, 10);
         this.dateInput.value = /^\d{4}-\d{2}-\d{2}$/.test(isoDate)
             ? isoDate
-            : new Date().toISOString().slice(0, 10);
+            : this._localToday();
 
-        this.dateInput.min = new Date().toISOString().slice(0, 10);
+        this.dateInput.min = this._localToday();
         this._fetchSlots(this.dateInput.value);
     }
 
@@ -66,6 +66,17 @@ export default class SalesChannelPickupTimePlugin extends PluginBaseClass {
      * @returns {Promise<void>}
      * @private
      */
+    /**
+     * Today's date in the customer's local calendar (YYYY-MM-DD). toISOString()
+     * alone gives the UTC date, which is "yesterday" just after midnight east
+     * of UTC.
+     */
+    _localToday() {
+        const now = new Date();
+
+        return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    }
+
     async _fetchSlots(date) {
         if (!this.options.url || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
             return;

@@ -1,0 +1,56 @@
+{%  block kmh_pickup_location_create %}
+    <sw-page class="kmh-pickup-location">
+
+        {% block kmh_pickup_location_create_header %}
+            <template #smart-bar-header>
+                <h2>{{ $tc('kmh-pickup-location.general.title') }}</h2>
+            </template>
+        {% endblock %}
+
+        {% block kmh_pickup_location_create_actions %}
+            <template #smart-bar-actions>
+                <sw-button-process
+                        class="kmh-pickup-location__save-action"
+                        :is-loading="isLoading"
+                        :disabled="isLoading"
+                        :process-success="isSaveSuccessful"
+                        variant="primary"
+                        @update:process-success="saveFinish"
+                        @click.prevent="onSave"
+                >
+                    {{ $tc('kmh-pickup-location.detail.buttonSave') }}
+                </sw-button-process>
+            </template>
+        {% endblock %}
+
+        {% block kmh_pickup_location_create_content %}
+            <template #content>
+                <sw-card-view>
+                    {% block kmh_pickup_location_create_base_form %}
+                        <mt-card
+                                :title="cardLabel"
+                                position-identifier="kmh-pickup-location-base-form"
+                        >
+                            <kmh-pickup-location-base-form
+                                    v-if="pickupLocation"
+                                    :is-loading="isLoading"
+                                    :pickup-location="pickupLocation"
+                                    @sales-channel-change="onChangeSalesChannel"
+                            />
+                        </mt-card>
+                    {% endblock %}
+
+                    {% block kmh_pickup_location_create_schedule %}
+                        <mt-card
+                                v-if="pickupLocation"
+                                :title="$tc('kmh-pickup-location.schedule.cardTitle')"
+                                position-identifier="kmh-pickup-location-schedule"
+                        >
+                            <kmh-pickup-location-schedule :pickup-location="pickupLocation" />
+                        </mt-card>
+                    {% endblock %}
+                </sw-card-view>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

@@ -30,7 +30,7 @@ readonly class PickupLocationValidator
 
     public function validate(string $pickupLocationId, SalesChannelContext $context): void
     {
-        $definition = new DataValidationDefinition('kommandhub_click_and_pick.context_switch');
+        $definition = new DataValidationDefinition('kmh_click_and_pick.context_switch');
         $definition->add(
             PickupContextKeys::LOCATION_ID,
             new EntityExists([

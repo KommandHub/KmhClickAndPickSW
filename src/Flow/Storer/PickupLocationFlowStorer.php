@@ -22,7 +22,7 @@ use Shopware\Core\Framework\Event\FlowEventAware;
 class PickupLocationFlowStorer extends FlowStorer
 {
     public function __construct(
-        private readonly EntityRepository $kommandhubPickupLocationRepository
+        private readonly EntityRepository $kmhPickupLocationRepository
     ) {
     }
 
@@ -64,7 +64,7 @@ class PickupLocationFlowStorer extends FlowStorer
             return null;
         }
 
-        $entity = $this->kommandhubPickupLocationRepository
+        $entity = $this->kmhPickupLocationRepository
             ->search(new Criteria([$id]), $storableFlow->getContext())
             ->first();
 

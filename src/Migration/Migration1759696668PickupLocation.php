@@ -28,6 +28,7 @@ class Migration1759696668PickupLocation extends MigrationStep
         $connection->executeStatement("
             CREATE TABLE IF NOT EXISTS `{$pickupLocationTable}` (
                 `id` BINARY(16) NOT NULL,
+                `default_sales_channel_id` BINARY(16) NULL,
                 `name` VARCHAR(255) NOT NULL,
                 `street` VARCHAR(255) NOT NULL,
                 `phone_number` VARCHAR(255) NULL,
@@ -48,7 +49,12 @@ class Migration1759696668PickupLocation extends MigrationStep
                 -- appends the PK, so this is physically (active, id) at the leaf;
                 -- an explicit (active, id) would be redundant.
                 INDEX `idx.{$pickupLocationTable}.active` (`active`),
-                INDEX `idx.{$pickupLocationTable}.location_code` (`location_code`)
+                INDEX `idx.{$pickupLocationTable}.location_code` (`location_code`),
+                CONSTRAINT `fk.{$pickupLocationTable}.default_sales_channel_id`
+                    FOREIGN KEY (`default_sales_channel_id`)
+                    REFERENCES `sales_channel` (`id`)
+                    ON DELETE SET NULL
+                    ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 

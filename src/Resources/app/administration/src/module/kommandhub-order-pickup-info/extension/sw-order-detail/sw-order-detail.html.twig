@@ -1,9 +1,0 @@
-{% block sw_order_detail_content_tabs_extension %}
-    {% parent %}
-    <sw-tabs-item
-        class="sw-order-detail__tab-kommandhub-pickup"
-        :route="{ name: 'sw.order.detail.pickup', params: { id: $route.params.id } }"
-    >
-        {{ $tc('kommandhub-order-pickup-info.tab.title') }}
-    </sw-tabs-item>
-{% endblock %}

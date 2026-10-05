@@ -30,7 +30,7 @@ class OrderExtensionTest extends TestCase
         $field = $collection->first();
 
         static::assertInstanceOf(OneToOneAssociationField::class, $field);
-        static::assertSame('kommandhubPickupLocation', $field->getPropertyName());
+        static::assertSame('kmhPickupLocation', $field->getPropertyName());
         static::assertSame(OrderPickupLocationDefinition::class, $field->getReferenceClass());
         static::assertSame('order_id', $field->getReferenceField());
         static::assertTrue($field->getAutoload());

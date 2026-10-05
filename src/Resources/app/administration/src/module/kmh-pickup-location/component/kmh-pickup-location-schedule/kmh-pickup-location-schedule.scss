@@ -1,0 +1,140 @@
+.kmh-pickup-location-schedule {
+    .mt-card {
+        margin-bottom: 24px;
+    }
+
+    &__summary {
+        background-color: var(--color-background-primary-default);
+        padding: 12px 16px;
+        border-radius: 4px;
+        border: 1px solid var(--color-border-primary-default);
+        margin-bottom: 24px;
+
+        p {
+            margin: 0;
+            color: var(--color-text-primary-default);
+        }
+    }
+
+    &__day {
+        border: 1px solid var(--color-border-primary-default);
+        border-radius: 4px;
+        margin-bottom: 8px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .sw-collapse__header {
+            padding: 0;
+        }
+    }
+
+    &__day-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        cursor: pointer;
+        width: 100%;
+
+        &:hover {
+            background-color: var(--color-background-primary-hover);
+        }
+    }
+
+    &__day-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .mt-switch {
+            margin-bottom: 0;
+        }
+    }
+
+    &__day-badge {
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+
+        &.is--closed {
+            background-color: var(--color-background-critical-default);
+            color: var(--color-text-critical-default);
+        }
+
+        &.is--open {
+            background-color: var(--color-background-success-default);
+            color: var(--color-text-success-default);
+        }
+    }
+
+    &__day-content {
+        padding: 16px;
+        border-top: 1px solid var(--color-border-primary-default);
+        background-color: var(--color-background-primary-default);
+    }
+
+    &__interval {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 16px;
+        align-items: flex-end;
+        margin-bottom: 16px;
+
+        .mt-text-field {
+            margin-bottom: 0;
+        }
+    }
+
+    &__day-actions {
+        margin-top: 16px;
+    }
+
+    &__special-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        cursor: pointer;
+        border: 1px solid var(--color-border-primary-default);
+        border-radius: 4px;
+
+        &:hover {
+            background-color: var(--color-background-primary-hover);
+        }
+    }
+
+    &__special-content {
+        padding: 16px;
+        border: 1px solid var(--color-border-primary-default);
+        border-top: none;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    &__special-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr auto;
+        gap: 16px;
+        align-items: flex-end;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--color-border-primary-default);
+
+        &:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .mt-text-field, .mt-datepicker, .mt-switch {
+            margin-bottom: 0;
+        }
+    }
+
+    &__special-actions {
+        margin-top: 16px;
+    }
+}

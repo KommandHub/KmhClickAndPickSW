@@ -1,0 +1,105 @@
+{% block kmh_order_pickup_info_tab %}
+<div class="kmh-order-pickup-info">
+
+    {% block kmh_order_pickup_info_tab_loading %}
+    <template v-if="isLoading">
+        <sw-skeleton />
+        <sw-skeleton />
+    </template>
+    {% endblock %}
+
+    {% block kmh_order_pickup_info_tab_empty %}
+    <sw-empty-state
+        v-else-if="pickupView.state === 'empty'"
+        :absolute="false"
+        :title="$tc('kmh-order-pickup-info.empty.title')"
+        :subline="$tc('kmh-order-pickup-info.empty.subline')"
+        icon="regular-map-marker"
+    />
+    {% endblock %}
+
+    {% block kmh_order_pickup_info_tab_content %}
+    <template v-else>
+
+        {% block kmh_order_pickup_info_tab_location_card %}
+        <mt-card
+            position-identifier="kmh-order-pickup-info-location"
+            :title="$tc('kmh-order-pickup-info.location.cardTitle')"
+        >
+            {% block kmh_order_pickup_info_tab_location_deleted %}
+            <mt-banner
+                v-if="pickupView.state === 'location-deleted'"
+                variant="attention"
+                :title="$tc('kmh-order-pickup-info.location.deletedTitle')"
+            >
+                {{ $tc('kmh-order-pickup-info.location.deletedText') }}
+            </mt-banner>
+            {% endblock %}
+
+            {% block kmh_order_pickup_info_tab_location_details %}
+            <dl v-if="pickupView.location" class="kmh-order-pickup-info__list">
+                <div class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.name') }}</dt>
+                    <dd>{{ pickupView.location.name }}</dd>
+                </div>
+                <div v-if="pickupView.location.locationCode" class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.code') }}</dt>
+                    <dd>{{ pickupView.location.locationCode }}</dd>
+                </div>
+                <div class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.address') }}</dt>
+                    <dd>
+                        {{ pickupView.location.street }}<br>
+                        {{ [pickupView.location.postalCode, pickupView.location.city].filter(Boolean).join(' ') }}
+                    </dd>
+                </div>
+                <div v-if="pickupView.location.phoneNumber" class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.phone') }}</dt>
+                    <dd>{{ pickupView.location.phoneNumber }}</dd>
+                </div>
+                <div v-if="pickupView.location.email" class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.email') }}</dt>
+                    <dd>{{ pickupView.location.email }}</dd>
+                </div>
+                <div v-if="pickupView.location.timezone" class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.location.timezone') }}</dt>
+                    <dd>{{ pickupView.location.timezone }}</dd>
+                </div>
+            </dl>
+            {% endblock %}
+        </mt-card>
+        {% endblock %}
+
+        {% block kmh_order_pickup_info_tab_appointment_card %}
+        <mt-card
+            position-identifier="kmh-order-pickup-info-appointment"
+            :title="$tc('kmh-order-pickup-info.appointment.cardTitle')"
+        >
+            <dl class="kmh-order-pickup-info__list">
+                <div class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.appointment.pickupTime') }}</dt>
+                    <dd v-if="pickupView.pickupTime">{{ formatDateTime(pickupView.pickupTime, pickupView.location && pickupView.location.timezone) }}</dd>
+                    <dd v-else class="kmh-order-pickup-info__muted">
+                        {{ $tc('kmh-order-pickup-info.appointment.pickupTimeEmpty') }}
+                    </dd>
+                </div>
+                <div class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.appointment.comment') }}</dt>
+                    <dd v-if="pickupView.comment" class="kmh-order-pickup-info__comment">{{ pickupView.comment }}</dd>
+                    <dd v-else class="kmh-order-pickup-info__muted">
+                        {{ $tc('kmh-order-pickup-info.appointment.commentEmpty') }}
+                    </dd>
+                </div>
+                <div v-if="pickupView.createdAt" class="kmh-order-pickup-info__row">
+                    <dt>{{ $tc('kmh-order-pickup-info.appointment.selectedAt') }}</dt>
+                    <dd>{{ formatDateTime(pickupView.createdAt) }}</dd>
+                </div>
+            </dl>
+        </mt-card>
+        {% endblock %}
+
+    </template>
+    {% endblock %}
+
+</div>
+{% endblock %}

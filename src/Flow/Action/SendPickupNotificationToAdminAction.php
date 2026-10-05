@@ -36,7 +36,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
  */
 class SendPickupNotificationToAdminAction extends FlowAction implements DelayableAction
 {
-    public const ACTION_NAME = 'action.kommandhub.pickup.notify_admin';
+    public const ACTION_NAME = 'action.kmh.pickup.notify_admin';
 
     public function __construct(
         private readonly AbstractMailService $mailService,
@@ -143,7 +143,7 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{subject: string, senderName: string|null, recipients: array<string, string>, salesChannelId: string, mailTemplateData: array<string, mixed>, contentHtml: string, contentPlain: string, attachmentsConfig: MailAttachmentsConfig, senderEmail?: string, mediaIds?: list<string>, attachments?: list<mixed>, documentIds?: list<string>}
      */
     private function buildMailData(
         MailTemplateEntity $template,
@@ -155,20 +155,23 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
         Context $context
     ): array {
         $data = [
-            'subject' => $template->getSubject(),
+            // AbstractMailService::send() requires non-null subject/content/sales
+            // channel; the template always carries them, so empty-string fallbacks
+            // are unreachable guards that satisfy the stricter signature.
+            'subject' => $template->getSubject() ?? '',
             'senderName' => $template->getSenderName(),
             'recipients' => [
                 $recipientEmail => $pickupLocation->getName(),
             ],
-            'salesChannelId' => $order->getSalesChannelId(),
+            'salesChannelId' => (string)$order->getSalesChannelId(),
             'mailTemplateData' => [
                 'order' => $order,
                 'customer' => $order->getOrderCustomer(),
                 'pickupLocation' => $pickupLocation,
                 'pickupOrderLocation' => $pickupOrderLocation,
             ],
-            'contentHtml' => $template->getContentHtml(),
-            'contentPlain' => $template->getContentPlain(),
+            'contentHtml' => $template->getContentHtml() ?? '',
+            'contentPlain' => $template->getContentPlain() ?? '',
             'attachmentsConfig' => new MailAttachmentsConfig(
                 $context,
                 $template,
@@ -176,6 +179,9 @@ class SendPickupNotificationToAdminAction extends FlowAction implements Delayabl
                 [],
                 $order->getId()
             ),
+            'mediaIds' => [],
+            'attachments' => [],
+            'documentIds' => [],
         ];
 
         // Only pin the sender when we have a valid one; otherwise the mail

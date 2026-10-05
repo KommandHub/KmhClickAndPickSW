@@ -1,12 +1,12 @@
 # Contributing
 
-Internal development guide for `KommandhubClickAndPickSW`. This is proprietary
+Internal development guide for `KmhClickAndPickSW`. This is proprietary
 software (see `LICENSE`); contributions come from Kommandhub developers and
 authorized partners.
 
 ## Prerequisites
 
-- The plugin lives at `custom/static-plugins/KommandhubClickAndPickSW` inside a
+- The plugin lives at `custom/static-plugins/KmhClickAndPickSW` inside a
   Shopware 6.7 install, or use the bundled dev stack.
 - PHP 8.2+, Composer, Docker (for the local stack), Node/npm (only for building
   admin/storefront assets).
@@ -63,7 +63,7 @@ composer install
 - Add a new `Migration<timestamp><Name>` under `src/Migration/`; make DDL
   idempotent (`CREATE TABLE IF NOT EXISTS`, `indexExists`/`columnExists` guards).
 - When adding a table with a foreign key to a plugin table, also extend the
-  uninstall drop list in `KommandhubClickAndPickSW::uninstall()` (child tables are
+  uninstall drop list in `KmhClickAndPickSW::uninstall()` (child tables are
   dropped before their parent).
 
 ## Releasing

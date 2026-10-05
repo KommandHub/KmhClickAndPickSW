@@ -1,20 +1,22 @@
 {
   "checkout": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Bitte wählen Sie einen gültigen Abholort aus, bevor Sie Ihre Bestellung aufgeben.",
       "unsupportedDeliveryMethod": "Die ausgewählte Versandart \"%deliveryMethodName%\" wird für die gewählte Zahlungsmethode nicht unterstützt. Bitte wählen Sie eine andere Versandart aus.",
-      "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit."
+      "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit.",
+      "pickupTimeRequired": "Bitte wählen Sie eine Abholzeit, bevor Sie Ihre Bestellung aufgeben."
     }
   },
   "error": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Bitte wählen Sie einen gültigen Abholort aus, bevor Sie Ihre Bestellung aufgeben.",
       "unsupportedDeliveryMethod": "Die ausgewählte Versandart \"%deliveryMethodName%\" wird für die gewählte Zahlungsmethode nicht unterstützt. Bitte wählen Sie eine andere Versandart aus.",
-      "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit."
+      "invalidPickupTime": "Die gewählte Abholzeit liegt außerhalb der Öffnungszeiten des Abholorts. Bitte wählen Sie eine verfügbare Zeit.",
+      "pickupTimeRequired": "Bitte wählen Sie eine Abholzeit, bevor Sie Ihre Bestellung aufgeben."
     }
   },
   "general": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "daysOfWeek": {
         "monday": "Montag",
         "tuesday": "Dienstag",
@@ -35,6 +37,10 @@
         "pickupTime": "Abholzeit",
         "pickupComment": "Anmerkungen"
       },
+      "pickupLocationField": {
+        "label": "Abholort auswählen",
+        "placeholder": "Bitte auswählen"
+      },
       "pickupTimeField": {
         "dateLabel": "Abholdatum",
         "timeLabel": "Abholzeit",
@@ -42,6 +48,14 @@
         "noSlots": "An diesem Datum sind keine Abholzeiten verfügbar.",
         "commentLabel": "Anmerkungen für den Abholort",
         "commentPlaceholder": "Optionale Hinweise (z. B. Ankunftszeit, Bestelldetails)"
+      },
+      "cookie": {
+        "geolocationName": "Abholorte nach Entfernung",
+        "geolocationDescription": "Ermöglicht es, im Checkout Ihren ungefähren Standort zu teilen, damit die nächstgelegenen Abholorte zuerst angezeigt werden. Ihr Standort wird gerundet, nur einmal verwendet und nie gespeichert."
+      },
+      "geolocation": {
+        "useMyLocation": "Meinen Standort verwenden",
+        "locationUnavailable": "Ihr Standort konnte nicht ermittelt werden. Die Abholorte werden in der üblichen Reihenfolge angezeigt."
       }
     }
   }

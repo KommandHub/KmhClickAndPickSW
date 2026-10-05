@@ -10,12 +10,14 @@ use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationSpec
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
@@ -26,7 +28,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('shopware.entity.definition', ['entity' => PickupLocationDefinition::ENTITY_NAME])]
 class PickupLocationDefinition extends EntityDefinition
 {
-    final public const ENTITY_NAME = 'kommandhub_pickup_location';
+    final public const ENTITY_NAME = 'kmh_pickup_location';
 
     public function getEntityName(): string
     {
@@ -63,6 +65,7 @@ class PickupLocationDefinition extends EntityDefinition
             (new StringField('longitude', 'longitude'))->addFlags(new ApiAware()),
             (new StringField('location_code', 'locationCode'))->addFlags(new ApiAware()),
             (new BoolField('active', 'active'))->addFlags(new ApiAware()),
+            (new FkField('default_sales_channel_id', 'defaultSalesChannelId', SalesChannelDefinition::class))->addFlags(new Required(), new ApiAware()),
 
             (new CreatedAtField())->addFlags(new ApiAware()),
             (new UpdatedAtField())->addFlags(new ApiAware()),
@@ -74,6 +77,14 @@ class PickupLocationDefinition extends EntityDefinition
                 'pickup_location_id',
                 'sales_channel_id',
             ),
+
+            (new ManyToOneAssociationField(
+                'defaultSalesChannel',
+                'default_sales_channel_id',
+                SalesChannelDefinition::class,
+                'id',
+                false
+            ))->addFlags(new ApiAware()),
 
             (new OneToManyAssociationField(
                 'openingHoursSchedule',

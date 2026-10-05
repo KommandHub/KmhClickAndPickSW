@@ -1,20 +1,22 @@
 {
   "checkout": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
-      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
+      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time.",
+      "pickupTimeRequired": "Please choose a pickup time before placing your order."
     }
   },
   "error": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
-      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
+      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time.",
+      "pickupTimeRequired": "Please choose a pickup time before placing your order."
     }
   },
   "general": {
-    "kommandhub-click-and-pick": {
+    "kmh-click-and-pick": {
       "daysOfWeek": {
         "monday": "Monday",
         "tuesday": "Tuesday",
@@ -35,6 +37,10 @@
         "pickupTime": "Pickup time",
         "pickupComment": "Notes"
       },
+      "pickupLocationField": {
+        "label": "Select pickup location",
+        "placeholder": "Please select"
+      },
       "pickupTimeField": {
         "dateLabel": "Pickup date",
         "timeLabel": "Pickup time",
@@ -42,6 +48,14 @@
         "noSlots": "No pickup times available on this date.",
         "commentLabel": "Notes for the pickup location",
         "commentPlaceholder": "Optional instructions (e.g. arrival time, order details)"
+      },
+      "cookie": {
+        "geolocationName": "Pickup location by distance",
+        "geolocationDescription": "Lets you share your approximate location in checkout so the nearest pickup locations are listed first. Your location is rounded, used once and never stored."
+      },
+      "geolocation": {
+        "useMyLocation": "Use my location",
+        "locationUnavailable": "Your location could not be determined. The pickup locations are shown in their usual order."
       }
     }
   }

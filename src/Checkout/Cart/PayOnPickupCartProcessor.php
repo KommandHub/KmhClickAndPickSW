@@ -6,6 +6,7 @@ namespace Kommandhub\ClickAndPickSW\Checkout\Cart;
 
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\InvalidPickupTimeCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupLocationRequiredCartBlockerError;
+use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupTimeRequiredCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\UnsupportedDeliveryMethodCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Payment\PayOnPickupPaymentHandler;
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupTimeSlotService;
@@ -76,9 +77,14 @@ readonly class PayOnPickupCartProcessor implements CartValidatorInterface
 
         // Server-side pickup-time validation gate: a chosen time must fall inside
         // the location's schedule (its timezone, overrides and future rules).
-        if ($selection->pickupTime !== null
-            && !$this->pickupTimeSlotService->isBookable($selection->pickupLocation, $selection->pickupTime)
-        ) {
+        if ($selection->pickupTime === null) {
+            // The store needs a time to prepare the order; without one it can't.
+            $errors->add(new PickupTimeRequiredCartBlockerError());
+
+            return;
+        }
+
+        if (!$this->pickupTimeSlotService->isBookable($selection->pickupLocation, $selection->pickupTime)) {
             $errors->add(new InvalidPickupTimeCartBlockerError());
         }
     }

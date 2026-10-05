@@ -7,8 +7,9 @@ namespace Kommandhub\ClickAndPickSW\Tests\Unit\Listener;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextKeys;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\Listener\SwitchContextEventListener;
+use Kommandhub\ClickAndPickSW\PickupLocation\DefaultPickupLocationProvider;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -28,18 +29,29 @@ class SwitchContextEventListenerTest extends TestCase
 {
     private const LOCATION_ID = 'fedcba9876543210fedcba9876543210';
     private const TOKEN = 'context-token';
+    private const DEFAULT_LOCATION_ID = '0123456789abcdef0123456789abcdef';
+    private const SALES_CHANNEL_ID = 'sales-channel-id';
 
     private PickupContextStorage&MockObject $storage;
 
     private PickupLocationValidator&MockObject $validator;
 
+    private DefaultPickupLocationProvider&MockObject $defaultProvider;
+
     private SwitchContextEventListener $listener;
+
+    private bool $selectionEnabled = true;
+
+    private ?string $defaultLocationId = self::DEFAULT_LOCATION_ID;
 
     protected function setUp(): void
     {
         $this->storage = $this->createMock(PickupContextStorage::class);
         $this->validator = $this->createMock(PickupLocationValidator::class);
-        $this->listener = new SwitchContextEventListener($this->storage, $this->validator);
+        $this->defaultProvider = $this->createMock(DefaultPickupLocationProvider::class);
+        $this->defaultProvider->method('isSelectionEnabled')->willReturnCallback(fn (): bool => $this->selectionEnabled);
+        $this->defaultProvider->method('getDefaultLocationId')->willReturnCallback(fn (): ?string => $this->defaultLocationId);
+        $this->listener = new SwitchContextEventListener($this->storage, $this->validator, $this->defaultProvider);
     }
 
     public function testIgnoresSwitchesWithoutPickupField(): void
@@ -148,7 +160,7 @@ class SwitchContextEventListenerTest extends TestCase
 
     public function testResolvedAttachesStoredSelectionAsExtension(): void
     {
-        $context = $this->context(KommandhubClickAndPickSW::SHIPPING_METHOD_ID);
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
 
         $this->storage
             ->method('load')
@@ -170,13 +182,84 @@ class SwitchContextEventListenerTest extends TestCase
 
     public function testResolvedAttachesNothingWhenSelectionEmpty(): void
     {
-        $context = $this->context(KommandhubClickAndPickSW::SHIPPING_METHOD_ID);
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
 
         $this->storage->method('load')->willReturn(new StoredPickupSelection());
 
         $this->listener->onSalesChannelContextResolved(
             new SalesChannelContextResolvedEvent($context, self::TOKEN)
         );
+
+        static::assertNull($context->getExtension(PickupContextKeys::EXTENSION));
+    }
+
+    public function testLockedSelectionPersistsTheDefaultLocationWhateverWasPosted(): void
+    {
+        $this->selectionEnabled = false;
+        $context = $this->context();
+
+        $this->validator->expects(static::once())->method('validate')->with(self::DEFAULT_LOCATION_ID, $context);
+        $this->storage
+            ->expects(static::once())
+            ->method('save')
+            ->with(
+                $context,
+                static::callback(static fn (StoredPickupSelection $selection): bool => $selection->pickupLocationId === self::DEFAULT_LOCATION_ID
+                    && $selection->pickupTime === '2024-06-03T10:00:00+01:00')
+            );
+
+        $this->listener->onSwitchContext($this->switchEvent(
+            new RequestDataBag([
+                PickupContextKeys::LOCATION_ID => self::LOCATION_ID,
+                PickupContextKeys::TIME => '2024-06-03T10:00:00+01:00',
+            ]),
+            $context
+        ));
+    }
+
+    public function testLockedSelectionWithoutDefaultClearsTheSelection(): void
+    {
+        $this->selectionEnabled = false;
+        $this->defaultLocationId = null;
+        $context = $this->context();
+
+        $this->storage->expects(static::once())->method('clear')->with($context);
+        $this->storage->expects(static::never())->method('save');
+
+        $this->listener->onSwitchContext($this->switchEvent(
+            new RequestDataBag([PickupContextKeys::LOCATION_ID => self::LOCATION_ID]),
+            $context
+        ));
+    }
+
+    public function testResolvedPreselectsAndPersistsDefaultWhenSelectionIsLocked(): void
+    {
+        $this->selectionEnabled = false;
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
+
+        $this->storage->method('load')->willReturn(new StoredPickupSelection());
+        $this->storage
+            ->expects(static::once())
+            ->method('save')
+            ->with($context, static::callback(static fn (StoredPickupSelection $s): bool => $s->pickupLocationId === self::DEFAULT_LOCATION_ID));
+
+        $this->listener->onSalesChannelContextResolved(new SalesChannelContextResolvedEvent($context, self::TOKEN));
+
+        $extension = $context->getExtension(PickupContextKeys::EXTENSION);
+        static::assertInstanceOf(ArrayStruct::class, $extension);
+        static::assertSame(self::DEFAULT_LOCATION_ID, $extension->get(PickupContextKeys::LOCATION_ID));
+    }
+
+    public function testResolvedAttachesNothingWhenLockedWithoutDefault(): void
+    {
+        $this->selectionEnabled = false;
+        $this->defaultLocationId = null;
+        $context = $this->context(KmhClickAndPickSW::SHIPPING_METHOD_ID);
+
+        $this->storage->method('load')->willReturn(new StoredPickupSelection());
+        $this->storage->expects(static::never())->method('save');
+
+        $this->listener->onSalesChannelContextResolved(new SalesChannelContextResolvedEvent($context, self::TOKEN));
 
         static::assertNull($context->getExtension(PickupContextKeys::EXTENSION));
     }
@@ -195,12 +278,13 @@ class SwitchContextEventListenerTest extends TestCase
     {
         $context = $this->getMockBuilder(SalesChannelContext::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getShippingMethod'])
+            ->onlyMethods(['getShippingMethod', 'getSalesChannelId'])
             ->getMock();
 
         $shippingMethod = new ShippingMethodEntity();
         $shippingMethod->setId($shippingMethodId ?? 'default-shipping-method');
         $context->method('getShippingMethod')->willReturn($shippingMethod);
+        $context->method('getSalesChannelId')->willReturn(self::SALES_CHANNEL_ID);
 
         return $context;
     }

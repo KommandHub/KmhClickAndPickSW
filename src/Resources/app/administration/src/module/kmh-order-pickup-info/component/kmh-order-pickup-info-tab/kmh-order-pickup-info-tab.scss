@@ -1,0 +1,43 @@
+.kmh-order-pickup-info {
+    &__list {
+        margin: 0;
+        display: grid;
+        gap: 16px;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(140px, 220px) 1fr;
+        gap: 8px 24px;
+        align-items: start;
+
+        dt {
+            margin: 0;
+            font-weight: 600;
+            color: #52667a;
+        }
+
+        dd {
+            margin: 0;
+            color: #1f2937;
+            overflow-wrap: break-word;
+        }
+    }
+
+    &__comment {
+        white-space: pre-wrap;
+    }
+
+    &__muted {
+        color: #758ca3;
+        font-style: italic;
+    }
+
+    // Stack labels above values on narrow tab widths.
+    @media (max-width: 700px) {
+        &__row {
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
+    }
+}

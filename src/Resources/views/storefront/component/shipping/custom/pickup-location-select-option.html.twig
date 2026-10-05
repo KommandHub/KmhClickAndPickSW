@@ -1,9 +1,11 @@
 {% block pickup_location_select_option_container %}
-    <option value="" data-pickup-location-location-field-id-option>Please select</option>
+    {% if not selectionDisabled %}
+        <option value="" data-pickup-location-location-field-id-option>{{ "general.kmh-click-and-pick.pickupLocationField.placeholder" | trans }}</option>
+    {% endif %}
     {% for location in locations %}
         <option class="pickup-location-location-field-id-option" value="{{ location.id }}"
-                {% if location.id is same as(context.extensions.pickupLocation.id) %}selected{% endif %}>
-            {{ location.name }}{% if config('KommandhubClickAndPickSW.config.showStreetNameInPickupLocationSelectionField') %} - {{ location.street }}{% endif %}, {{ location.city }}
+                {% if selectionDisabled or location.id is same as(context.extensions.pickupLocation.id) %}selected{% endif %}>
+            {{ location.name }}{% if config('KmhClickAndPickSW.config.showStreetNameInPickupLocationSelectionField') %} - {{ location.street }}{% endif %}, {{ location.city }}
         </option>
     {% endfor %}
 {% endblock %}

@@ -6,6 +6,7 @@ namespace Kommandhub\ClickAndPickSW\Tests\Unit\Checkout\Cart;
 
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\InvalidPickupTimeCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupLocationRequiredCartBlockerError;
+use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupTimeRequiredCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\UnsupportedDeliveryMethodCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\PayOnPickupCartProcessor;
 use Kommandhub\ClickAndPickSW\Checkout\Payment\PayOnPickupPaymentHandler;
@@ -16,7 +17,7 @@ use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationOpeningHour\PickupLocationOpeningHourCollection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\Aggregate\PickupLocationOpeningHour\PickupLocationOpeningHourEntity;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupLocationAvailabilityService;
 use Kommandhub\ClickAndPickSW\PickupLocation\Availability\PickupTimeSlotService;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationSelectionResolver;
@@ -39,6 +40,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 #[CoversClass(PayOnPickupCartProcessor::class)]
 #[UsesClass(PickupLocationRequiredCartBlockerError::class)]
+#[UsesClass(PickupTimeRequiredCartBlockerError::class)]
 #[UsesClass(InvalidPickupTimeCartBlockerError::class)]
 #[UsesClass(PickupLocationSelectionResolver::class)]
 #[UsesClass(PickupContextStorage::class)]
@@ -140,12 +142,12 @@ class PayOnPickupCartProcessorTest extends TestCase
         );
     }
 
-    public function testAllowsClickAndPickShippingWithValidPickupLocation(): void
+    public function testRequiresPickupTimeForValidPickupLocation(): void
     {
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         $this->storeSelection(self::LOCATION_ID);
 
@@ -182,7 +184,9 @@ class PayOnPickupCartProcessorTest extends TestCase
 
         $this->processor->validate(new Cart('token'), $errors, $context);
 
-        static::assertCount(0, $errors);
+        // A valid location alone is not enough: the store needs a pickup time.
+        static::assertCount(1, $errors);
+        static::assertInstanceOf(PickupTimeRequiredCartBlockerError::class, $errors->first());
     }
 
     public function testAddsBlockingErrorWhenClickAndPickShippingHasNoPickupLocation(): void
@@ -198,7 +202,7 @@ class PayOnPickupCartProcessorTest extends TestCase
             $errors,
             $this->salesChannelContext(
                 $this->paymentMethod('App\\OtherPaymentHandler'),
-                $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+                $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
             )
         );
 
@@ -211,7 +215,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod('App\\OtherPaymentHandler'),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // Persisted, but the location no longer resolves (deactivated / removed).
         $this->storeSelection(self::LOCATION_ID);
@@ -239,15 +243,16 @@ class PayOnPickupCartProcessorTest extends TestCase
     {
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         static::assertNull($context->getExtension(PickupContextKeys::EXTENSION));
 
-        $this->storeSelection(self::LOCATION_ID);
+        // Monday 10:00 UTC, inside Monday 09:00–17:00.
+        $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');
 
-        $pickupLocation = new PickupLocationEntity();
-        $pickupLocation->setId(self::LOCATION_ID);
-        $this->pickupLocationRepository->method('search')->willReturn($this->firstResult($pickupLocation));
+        $this->pickupLocationRepository->method('search')->willReturn(
+            $this->firstResult($this->location([[1, '09:00', '17:00']]))
+        );
 
         // Simulate several cart-calculation passes within a submission.
         for ($pass = 0; $pass < 5; ++$pass) {
@@ -263,7 +268,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // A time is chosen, but the location has no opening hours covering it.
         $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');
@@ -283,7 +288,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
             $this->paymentMethod(PayOnPickupPaymentHandler::class),
-            $this->shippingMethod(KommandhubClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
+            $this->shippingMethod(KmhClickAndPickSW::SHIPPING_METHOD_ID, 'Self pick-up')
         );
         // Monday 10:00 UTC, inside Monday 09:00–17:00.
         $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');

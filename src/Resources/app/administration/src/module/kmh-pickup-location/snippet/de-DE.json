@@ -1,0 +1,144 @@
+{
+  "kmh-pickup-location": {
+    "schedule": {
+      "cardTitle": "Öffnungszeiten",
+      "labelTimezone": "Zeitzone",
+      "helpTimezone": "IANA-Zeitzone zur Bewertung der Verfügbarkeit (z. B. Europe/Berlin). Öffnungszeiten sind lokal zu dieser Zone.",
+      "addInterval": "Intervall hinzufügen",
+      "labelOpen": "Öffnet",
+      "labelClose": "Schließt",
+      "remove": "Entfernen",
+      "specialTitle": "Sondertermine & Feiertage",
+      "addSpecial": "Sondertermin hinzufügen",
+      "labelDate": "Datum",
+      "labelClosed": "Geschlossen",
+      "errorInvalidTime": "Gültige Uhrzeit eingeben (HH:MM).",
+      "errorOrder": "Schließzeit muss nach der Öffnungszeit liegen.",
+      "errorOverlap": "Dieses Intervall überschneidet sich mit einem anderen am selben Tag.",
+      "weeklyTitle": "Wochenplan",
+      "labelSummary": "Zusammenfassung",
+      "closed": "Geschlossen",
+      "intervalsCount": "Intervall(e)",
+      "specialSummary": "{count} Sondertermine konfiguriert",
+      "summaryEmpty": "Kein Zeitplan konfiguriert",
+      "summaryClosed": "Die ganze Woche geschlossen"
+    },
+    "general": {
+      "title": "Abholorte",
+      "placeholderSearchBar": "Abholorte suchen...",
+      "mainMenuItemGeneral": "Abholorte",
+      "mainMenuItemGeneralDescription": "Verwalten Sie Ihre Abholorte",
+      "deleteWarning": "Warnung",
+      "buttonDelete": "Löschen",
+      "messageSaveError": "Beim Speichern des Abholortes ist ein Fehler aufgetreten.",
+      "messageSaveSuccess": "Der Abholort wurde erfolgreich gespeichert."
+    },
+    "list": {
+      "title": "Abholorte",
+      "columnName": "Name",
+      "columnStreet": "Straße",
+      "columnPostalCode": "Postleitzahl",
+      "columnCity": "Stadt",
+      "columnCountry": "Land",
+      "columnState": "Bundesland",
+      "columnPhoneNumber": "Telefon",
+      "columnEmail": "E-Mail",
+      "columnActive": "Aktiv",
+      "columnActions": "Aktionen",
+      "columnLocationCode": "Standortcode",
+      "columnOpeningHours": "Öffnungszeiten",
+      "columnClosingHours": "Schließzeiten",
+      "columnLatitude": "Breitengrad",
+      "columnLongitude": "Längengrad",
+      "columnSalesChannel": "Vertriebskanal",
+      "deleteSuccessMessage": "Der Abholort wurde gelöscht.",
+      "deleteErrorMessage": "Der Abholort konnte nicht gelöscht werden.",
+      "deleteModalTitle": "Abholort löschen",
+      "deleteModalMessage": "Möchten Sie diesen Abholort wirklich löschen?",
+      "addButtonLabel": "Abholort hinzufügen",
+      "contextMenuDelete": "Löschen",
+      "contextMenuView": "Anzeigen",
+      "contextMenuEdit": "Bearbeiten",
+      "salesChannel": "Vertriebskanal",
+      "textDeleteConfirm": "Möchten Sie den Abholort \"{name}\" wirklich löschen?",
+      "messageEmpty": "Keine Abholorte gefunden."
+    },
+    "detail": {
+      "buttonSave": "Speichern"
+    },
+    "create": {
+      "title": "Abholort erstellen",
+      "buttonCreate": "Abholort erstellen"
+    },
+    "edit": {
+      "title": "Neuer Abholort",
+      "buttonEdit": "Änderungen speichern"
+    },
+    "baseForm": {
+      "labelName": "Name",
+      "labelStreet": "Straße",
+      "labelPostalCode": "Postleitzahl",
+      "labelCity": "Stadt",
+      "labelCountry": "Land",
+      "labelState": "Bundesland",
+      "labelPhoneNumber": "Telefonnummer",
+      "labelEmail": "E-Mail",
+      "labelActive": "Aktiv",
+      "labelLocationCode": "Standortcode",
+      "labelTimeFormat": "Zeitformat",
+      "labelTimeFormat12Hour": "12-Stunden (AM/PM)",
+      "labelTimeFormat24Hour": "24-Stunden",
+      "labelOpeningHours": "Öffnungszeiten",
+      "labelClosingHours": "Schließzeiten",
+      "labelLatitude": "Breitengrad",
+      "labelLongitude": "Längengrad",
+      "labelDefaultSalesChannel": "Standard-Vertriebskanal",
+      "labelSalesChannel": "Vertriebskanal",
+      "labelAdditionalAddressLine1": "Zusätzliche Adresszeile 1",
+      "labelAdditionalAddressLine2": "Zusätzliche Adresszeile 2",
+      "placeholderName": "Geben Sie den Namen des Abholortes ein",
+      "placeholderStreet": "Geben Sie die Straßenadresse ein",
+      "placeholderPostalCode": "Geben Sie die Postleitzahl ein",
+      "placeholderCity": "Geben Sie die Stadt ein",
+      "placeholderCountry": "Wählen Sie das Land aus",
+      "placeholderState": "Wählen Sie das Bundesland aus",
+      "placeholderPhoneNumber": "Geben Sie die Telefonnummer ein",
+      "placeholderEmail": "Geben Sie die E-Mail-Adresse ein",
+      "placeholderLocationCode": "Geben Sie den Standortcode ein",
+      "placeholderTimeFormat": "Zeitformat auswählen",
+      "placeholderOpeningHours": "Öffnungszeiten auswählen",
+      "placeholderClosingHours": "Schließzeiten auswählen",
+      "placeholderLatitude": "Geben Sie den Breitengrad ein",
+      "placeholderLongitude": "Geben Sie den Längengrad ein",
+      "placeholderDefaultSalesChannel": "Wählen Sie den Standard-Vertriebskanal aus",
+      "placeholderSalesChannel": "Wählen Sie den Vertriebskanal aus",
+      "placeholderAdditionalAddressLine1": "Geben Sie zusätzliche Adresszeile 1 ein",
+      "placeholderAdditionalAddressLine2": "Geben Sie zusätzliche Adresszeile 2 ein",
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    },
+    "filter": {
+      "saleChannel": {
+        "label": "Vertriebskanal",
+        "placeholder": "Vertriebskanal auswählen"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "kmh_pickup_location": {
+        "label": "Abholorte"
+      }
+    }
+  },
+  "global": {
+    "entities": {
+      "kmh_pickup_location": "Abholort"
+    }
+  }
+}

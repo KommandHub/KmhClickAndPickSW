@@ -1,0 +1,144 @@
+{
+  "kmh-pickup-location": {
+    "schedule": {
+      "cardTitle": "Opening schedule",
+      "labelTimezone": "Timezone",
+      "helpTimezone": "IANA timezone used to evaluate availability (e.g. Europe/Berlin). Opening times are local to this zone.",
+      "addInterval": "Add interval",
+      "labelOpen": "Opens",
+      "labelClose": "Closes",
+      "remove": "Remove",
+      "specialTitle": "Special dates & holidays",
+      "addSpecial": "Add special date",
+      "labelDate": "Date",
+      "labelClosed": "Closed",
+      "errorInvalidTime": "Enter a valid time (HH:MM).",
+      "errorOrder": "Closing time must be after opening time.",
+      "errorOverlap": "This interval overlaps another on the same day.",
+      "weeklyTitle": "Weekly schedule",
+      "labelSummary": "Summary",
+      "closed": "Closed",
+      "intervalsCount": "interval(s)",
+      "specialSummary": "{count} special dates configured",
+      "summaryEmpty": "No schedule configured",
+      "summaryClosed": "Closed all week"
+    },
+    "general": {
+      "title": "Pickup Locations",
+      "mainMenuItemGeneral": "Pickup Locations",
+      "mainMenuItemGeneralDescription": "Manage your pickup locations",
+      "deleteWarning": "Warning",
+      "buttonDelete": "Delete",
+      "messageSaveError": "An error occurred while saving the pickup location.",
+      "messageSaveSuccess": "The pickup location has been saved successfully.",
+      "placeholderSearchBar": "Search pickup locations..."
+    },
+    "list": {
+      "title": "Pickup Locations",
+      "columnName": "Name",
+      "columnStreet": "Street",
+      "columnPostalCode": "Postal Code",
+      "columnCity": "City",
+      "columnCountry": "Country",
+      "columnState": "State",
+      "columnPhoneNumber": "Phone",
+      "columnEmail": "Email",
+      "columnActive": "Active",
+      "columnActions": "Actions",
+      "columnLocationCode": "Location Code",
+      "columnOpeningHours": "Opening Hours",
+      "columnClosingHours": "Closing Hours",
+      "columnLatitude": "Latitude",
+      "columnLongitude": "Longitude",
+      "columnSalesChannel": "Sales Channel",
+      "deleteSuccessMessage": "The pickup location has been deleted.",
+      "deleteErrorMessage": "The pickup location could not be deleted.",
+      "deleteModalTitle": "Delete pickup location",
+      "deleteModalMessage": "Are you sure you want to delete this pickup location?",
+      "addButtonLabel": "Add pickup location",
+      "contextMenuDelete": "Delete",
+      "contextMenuView": "View",
+      "contextMenuEdit": "Edit",
+      "salesChannel": "Sales Channel",
+      "textDeleteConfirm": "Are you sure you want to delete the pickup location \"{name}\"?",
+      "messageEmpty": "No pickup locations found."
+    },
+    "detail": {
+      "buttonSave": "Save"
+    },
+    "create": {
+      "title": "New pickup location",
+      "buttonCreate": "Create pickup location"
+    },
+    "edit": {
+      "title": "Edit pickup location",
+      "buttonEdit": "Save changes"
+    },
+    "baseForm": {
+      "labelName": "Name",
+      "labelStreet": "Street",
+      "labelPostalCode": "Postal Code",
+      "labelCity": "City",
+      "labelCountry": "Country",
+      "labelState": "State",
+      "labelPhoneNumber": "Phone Number",
+      "labelEmail": "Email",
+      "labelActive": "Active",
+      "labelLocationCode": "Location Code",
+      "labelTimeFormat": "Time format",
+      "labelTimeFormat12Hour": "12-hour (AM/PM)",
+      "labelTimeFormat24Hour": "24-hour",
+      "labelOpeningHours": "Opening Hours",
+      "labelClosingHours": "Closing Hours",
+      "labelLatitude": "Latitude",
+      "labelLongitude": "Longitude",
+      "labelDefaultSalesChannel": "Default Sales Channel",
+      "labelSalesChannel": "Sales Channel",
+      "labelAdditionalAddressLine1": "Additional Address Line 1",
+      "labelAdditionalAddressLine2": "Additional Address Line 2",
+      "placeholderName": "Enter the name of the pickup location",
+      "placeholderStreet": "Enter the street address",
+      "placeholderPostalCode": "Enter the postal code",
+      "placeholderCity": "Enter the city",
+      "placeholderCountry": "Select the country",
+      "placeholderState": "Select the state",
+      "placeholderPhoneNumber": "Enter the phone number",
+      "placeholderEmail": "Enter the email address",
+      "placeholderLocationCode": "Enter the location code",
+      "placeholderTimeFormat": "Select the time format",
+      "placeholderOpeningHours": "Select the opening hours",
+      "placeholderClosingHours": "Select the closing hours",
+      "placeholderLatitude": "Enter the latitude",
+      "placeholderLongitude": "Enter the longitude",
+      "placeholderDefaultSalesChannel": "Select the default sales channel",
+      "placeholderSalesChannel": "Select the sales channel",
+      "placeholderAdditionalAddressLine1": "Enter additional address line 1",
+      "placeholderAdditionalAddressLine2": "Enter additional address line 2",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "filter": {
+      "saleChannel": {
+        "label": "Sales Channel",
+        "placeholder": "Select sales channel"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "kmh_pickup_location": {
+        "label": "Pickup Locations"
+      }
+    }
+  },
+  "global": {
+    "entities": {
+        "kmh_pickup_location": "Pickup Location"
+    }
+  }
+}

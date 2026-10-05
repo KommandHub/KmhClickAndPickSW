@@ -16,7 +16,7 @@ use Shopware\Core\Framework\Uuid\Uuid;
 readonly class OrderPickupLocationWriter
 {
     public function __construct(
-        private EntityRepository $kommandhubOrderPickupLocationRepository,
+        private EntityRepository $kmhOrderPickupLocationRepository,
     ) {
     }
 
@@ -29,7 +29,7 @@ readonly class OrderPickupLocationWriter
     {
         $id = Uuid::randomHex();
 
-        $this->kommandhubOrderPickupLocationRepository->create([
+        $this->kmhOrderPickupLocationRepository->create([
             [
                 'id' => $id,
                 'orderId' => $orderId,

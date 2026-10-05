@@ -16,8 +16,8 @@ class InvalidPickupTimeCartBlockerErrorTest extends TestCase
     {
         $error = new InvalidPickupTimeCartBlockerError();
 
-        static::assertSame('kommandhub-click-and-pick.invalidPickupTime', $error->getId());
-        static::assertSame('kommandhub-click-and-pick.invalidPickupTime', $error->getMessageKey());
+        static::assertSame('kmh-click-and-pick.invalidPickupTime', $error->getId());
+        static::assertSame('kmh-click-and-pick.invalidPickupTime', $error->getMessageKey());
         static::assertSame(Error::LEVEL_ERROR, $error->getLevel());
         static::assertTrue($error->blockOrder());
         static::assertSame([], $error->getParameters());

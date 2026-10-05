@@ -2,11 +2,11 @@
 .PHONY: help up down build restart shell plugin-list test test-coverage cs cs-fix analyse fixture-load resync prepare validate-plugin cli changelog zip
 
 CONTAINER := shopware
-PLUGIN_DIR := custom/static-plugins/KommandhubClickAndPickSW
+PLUGIN_DIR := custom/static-plugins/KmhClickAndPickSW
 
 # Plugins installed via composer
 STATIC_PLUGINS := \
-	kommandhub/click-and-pick-sw:KommandhubClickAndPickSW
+	kommandhub/click-and-pick-sw:KmhClickAndPickSW
 
 # Only plugins that should be copied into custom/static-plugins
 STATIC_COPY_PLUGINS :=

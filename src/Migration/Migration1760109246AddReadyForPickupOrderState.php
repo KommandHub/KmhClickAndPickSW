@@ -4,7 +4,7 @@ namespace Kommandhub\ClickAndPickSW\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Migration\MigrationStep;
@@ -36,7 +36,7 @@ class Migration1760109246AddReadyForPickupOrderState extends MigrationStep
         $defaultLangId = $this->fetchLanguageId('en-GB', $connection);
 
         $readyForPickupStateId = Uuid::fromHexToBytes(
-            KommandhubClickAndPickSW::STATE_READY_FOR_PICKUP_ID
+            KmhClickAndPickSW::STATE_READY_FOR_PICKUP_ID
         );
         $readyForPickupTechnicalName = \Kommandhub\ClickAndPickSW\Entity\Order\Aggregated\OrderDelivery\OrderDeliveryStates::STATE_READY_FOR_PICKUP;
 

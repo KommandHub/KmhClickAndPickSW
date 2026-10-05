@@ -16,8 +16,8 @@ class UnsupportedDeliveryMethodCartBlockerErrorTest extends TestCase
     {
         $error = new UnsupportedDeliveryMethodCartBlockerError('Express Delivery');
 
-        static::assertSame('kommandhub-click-and-pick.unsupportedDeliveryMethod', $error->getId());
-        static::assertSame('kommandhub-click-and-pick.unsupportedDeliveryMethod', $error->getMessageKey());
+        static::assertSame('kmh-click-and-pick.unsupportedDeliveryMethod', $error->getId());
+        static::assertSame('kmh-click-and-pick.unsupportedDeliveryMethod', $error->getMessageKey());
         static::assertSame(Error::LEVEL_WARNING, $error->getLevel());
         static::assertTrue($error->blockOrder());
         static::assertSame(

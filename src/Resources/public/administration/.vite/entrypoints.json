@@ -1,17 +1,17 @@
 {
-  "base": "/bundles/kommandhubclickandpicksw/administration/",
+  "base": "/bundles/kmhclickandpicksw/administration/",
   "entryPoints": {
-    "kommandhub-click-and-pick-s-w": {
+    "kmh-click-and-pick-s-w": {
       "css": [],
       "dynamic": [
-        "/bundles/kommandhubclickandpicksw/administration/assets/index-DSFBPqdm.js",
-        "/bundles/kommandhubclickandpicksw/administration/assets/index-Cba5jXe_.js",
-        "/bundles/kommandhubclickandpicksw/administration/assets/index-B9NnYE0U.js",
-        "/bundles/kommandhubclickandpicksw/administration/assets/index-SEkHnCna.js",
-        "/bundles/kommandhubclickandpicksw/administration/assets/index-BcPBqSlw.js"
+        "/bundles/kmhclickandpicksw/administration/assets/index-K27ZqU86.js",
+        "/bundles/kmhclickandpicksw/administration/assets/index-CKUcrORx.js",
+        "/bundles/kmhclickandpicksw/administration/assets/index-CC2ug-9B.js",
+        "/bundles/kmhclickandpicksw/administration/assets/index-B62MuYUK.js",
+        "/bundles/kmhclickandpicksw/administration/assets/index-xFLI0wRK.js"
       ],
       "js": [
-        "/bundles/kommandhubclickandpicksw/administration/assets/kommandhub-click-and-pick-s-w-DgfmPA6W.js"
+        "/bundles/kmhclickandpicksw/administration/assets/kmh-click-and-pick-s-w-DNe8tf8a.js"
       ],
       "legacy": false,
       "preload": []

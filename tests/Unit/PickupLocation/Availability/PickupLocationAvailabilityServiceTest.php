@@ -160,6 +160,42 @@ class PickupLocationAvailabilityServiceTest extends TestCase
         static::assertSame([$laterToday], $result);
     }
 
+    public function testFilterOpenWithinDaysKeepsLocationsClosedTodayButOpenLater(): void
+    {
+        // 2024-06-03 is a Monday.
+        $wednesday = $this->location('UTC', $this->openingHours([[3, '09:00', '17:00']]), null);
+        $holidayThenOpen = $this->location(
+            'UTC',
+            $this->openingHours([[1, '09:00', '17:00'], [2, '09:00', '17:00']]),
+            $this->specialHours([['2024-06-03', true, null, null]])
+        );
+        $neverOpen = $this->location('UTC', $this->openingHours([]), null);
+
+        $result = $this->service->filterOpenWithinDays(
+            [$wednesday, $holidayThenOpen, $neverOpen],
+            7,
+            $this->at('2024-06-03 12:00:00')
+        );
+
+        static::assertSame([$wednesday, $holidayThenOpen], $result);
+    }
+
+    public function testFilterOpenWithinDaysOnlyLooksAheadTheGivenDays(): void
+    {
+        // Open only on Saturdays; from Monday a 3-day window misses it.
+        $saturday = $this->location('UTC', $this->openingHours([[6, '09:00', '17:00']]), null);
+
+        static::assertSame([], $this->service->filterOpenWithinDays([$saturday], 3, $this->at('2024-06-03 12:00:00')));
+        static::assertSame([$saturday], $this->service->filterOpenWithinDays([$saturday], 6, $this->at('2024-06-03 12:00:00')));
+    }
+
+    public function testFilterOpenWithinDaysDefaultsToNow(): void
+    {
+        $everyDay = $this->location('UTC', $this->openingHours(array_map(static fn (int $d): array => [$d, '00:00', '23:59'], range(1, 7))), null);
+
+        static::assertSame([$everyDay], $this->service->filterOpenWithinDays([$everyDay], 1));
+    }
+
     public function testFilterOpenReturnsOnlyOpenLocations(): void
     {
         $open = $this->location('UTC', $this->openingHours([[1, '09:00', '17:00']]), null);

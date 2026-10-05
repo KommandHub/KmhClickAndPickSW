@@ -4,10 +4,10 @@
 
     {{ parent() }}
 
-    {% set pickupRecord = order.extensions.kommandhubPickupLocation %}
+    {% set pickupRecord = order.extensions.kmhPickupLocation %}
     {% if pickupRecord and pickupRecord.pickupLocation %}
-        {% block component_shipping_method_label_kommandhub_self_pickup_location_field_info %}
-            {% sw_include '@KommandhubClickAndPickSW/storefront/component/shipping/custom/pickup-location-field-info.html.twig' with {
+        {% block component_shipping_method_label_kmh_self_pickup_location_field_info %}
+            {% sw_include '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-field-info.html.twig' with {
                 location: pickupRecord.pickupLocation,
                 pickupTime: pickupRecord.pickupTime,
                 pickupComment: pickupRecord.comment,

@@ -28,7 +28,7 @@ use Shopware\Core\Framework\Event\OrderAware;
  */
 class SendSmsToPickupLocationAction extends FlowAction implements DelayableAction
 {
-    public const ACTION_NAME = 'action.kommandhub.pickup.notify_sms';
+    public const ACTION_NAME = 'action.kmh.pickup.notify_sms';
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -135,9 +135,20 @@ class SendSmsToPickupLocationAction extends FlowAction implements DelayableActio
         $pickupTime = $pickupRecord?->getPickupTime();
 
         if ($pickupTime !== null) {
-            $message .= ' Pickup time: ' . $pickupTime->format('Y-m-d H:i') . '.';
+            // Stored in UTC; the store reads its own local time.
+            $local = \DateTimeImmutable::createFromInterface($pickupTime)->setTimezone($this->timezoneOf($pickupLocation));
+            $message .= ' Pickup time: ' . $local->format('Y-m-d H:i') . '.';
         }
 
         return $message;
+    }
+
+    private function timezoneOf(PickupLocationEntity $pickupLocation): \DateTimeZone
+    {
+        try {
+            return new \DateTimeZone($pickupLocation->getTimezone() ?? 'UTC');
+        } catch (\Exception) {
+            return new \DateTimeZone('UTC');
+        }
     }
 }

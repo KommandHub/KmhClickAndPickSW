@@ -1,0 +1,192 @@
+{% block kmh_pickup_location_schedule %}
+    <div class="kmh-pickup-location-schedule">
+        {% block kmh_pickup_location_schedule_timezone %}
+            <mt-card
+                class="kmh-pickup-location-schedule__timezone-card"
+                :title="$tc('kmh-pickup-location.schedule.labelTimezone')"
+            >
+                <sw-single-select
+                    class="kmh-pickup-location-schedule__timezone"
+                    :value="pickupLocation.timezone"
+                    :options="timezoneOptions"
+                    value-property="value"
+                    label-property="label"
+                    :label="$tc('kmh-pickup-location.schedule.labelTimezone')"
+                    :help-text="$tc('kmh-pickup-location.schedule.helpTimezone')"
+                    @update:value="pickupLocation.timezone = $event"
+                />
+            </mt-card>
+        {% endblock %}
+
+        {% block kmh_pickup_location_schedule_weekly %}
+            <mt-card
+                class="kmh-pickup-location-schedule__weekly-card"
+                :title="$tc('kmh-pickup-location.schedule.weeklyTitle')"
+            >
+                <template #default>
+                    <div class="kmh-pickup-location-schedule__summary">
+                        <p><strong>{{ $tc('kmh-pickup-location.schedule.labelSummary') }}:</strong> {{ scheduleSummary }}</p>
+                    </div>
+
+                    <div class="kmh-pickup-location-schedule__weekdays">
+                        <div
+                            v-for="day in weekdays"
+                            :key="day.iso"
+                            class="kmh-pickup-location-schedule__day"
+                        >
+                            <sw-collapse>
+                                <template #header="{ isExpanded, toggleCollapse }">
+                                    <div
+                                        class="kmh-pickup-location-schedule__day-header"
+                                        @click="toggleCollapse"
+                                    >
+                                        <div class="kmh-pickup-location-schedule__day-info">
+                                            <mt-switch
+                                                :model-value="isDayEnabled(day.iso)"
+                                                :label="day.label"
+                                                @update:model-value="toggleDay(day.iso, $event)"
+                                                @click.stop
+                                            />
+                                            <span
+                                                v-if="!isDayEnabled(day.iso)"
+                                                class="kmh-pickup-location-schedule__day-badge is--closed"
+                                            >
+                                                {{ $tc('kmh-pickup-location.schedule.closed') }}
+                                            </span>
+                                            <span
+                                                v-else
+                                                class="kmh-pickup-location-schedule__day-badge is--open"
+                                            >
+                                                {{ intervalsForDay(day.iso).length }} {{ $tc('kmh-pickup-location.schedule.intervalsCount') }}
+                                            </span>
+                                        </div>
+                                        <mt-icon
+                                            v-if="isExpanded"
+                                            name="regular-chevron-up-s"
+                                            size="16px"
+                                        />
+                                        <mt-icon
+                                            v-else
+                                            name="regular-chevron-down-s"
+                                            size="16px"
+                                        />
+                                    </div>
+                                </template>
+
+                                <template #content>
+                                    <div class="kmh-pickup-location-schedule__day-content">
+                                        <div
+                                            v-for="(interval, index) in intervalsForDay(day.iso)"
+                                            :key="interval.id"
+                                            class="kmh-pickup-location-schedule__interval"
+                                        >
+                                            <mt-text-field
+                                                v-model="interval.openTime"
+                                                :label="$tc('kmh-pickup-location.schedule.labelOpen')"
+                                                placeholder="09:00"
+                                            />
+                                            <mt-text-field
+                                                v-model="interval.closeTime"
+                                                :label="$tc('kmh-pickup-location.schedule.labelClose')"
+                                                placeholder="17:00"
+                                                :error="intervalError(interval) ? { detail: intervalError(interval) } : null"
+                                            />
+                                            <mt-button
+                                                size="x-small"
+                                                variant="critical"
+                                                ghost
+                                                @click="removeInterval(interval)"
+                                            >
+                                                <mt-icon name="regular-trash" size="16px" />
+                                            </mt-button>
+                                        </div>
+
+                                        <div class="kmh-pickup-location-schedule__day-actions">
+                                            <mt-button
+                                                size="x-small"
+                                                variant="secondary"
+                                                @click="addInterval(day.iso)"
+                                            >
+                                                {{ $tc('kmh-pickup-location.schedule.addInterval') }}
+                                            </mt-button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </sw-collapse>
+                        </div>
+                    </div>
+                </template>
+            </mt-card>
+        {% endblock %}
+
+        {% block kmh_pickup_location_schedule_special %}
+            <mt-card
+                class="kmh-pickup-location-schedule__special-card"
+                :title="$tc('kmh-pickup-location.schedule.specialTitle')"
+            >
+                <sw-collapse>
+                    <template #header="{ isExpanded, toggleCollapse }">
+                        <div
+                            class="kmh-pickup-location-schedule__special-header"
+                            @click="toggleCollapse"
+                        >
+                            <span>{{ $tc('kmh-pickup-location.schedule.specialSummary', { count: pickupLocation.specialHours.length }) }}</span>
+                            <mt-icon
+                                v-if="isExpanded"
+                                name="regular-chevron-up-s"
+                                size="16px"
+                            />
+                            <mt-icon
+                                v-else
+                                name="regular-chevron-down-s"
+                                size="16px"
+                            />
+                        </div>
+                    </template>
+
+                    <template #content>
+                        <div class="kmh-pickup-location-schedule__special-content">
+                            <div
+                                v-for="special in pickupLocation.specialHours"
+                                :key="special.id"
+                                class="kmh-pickup-location-schedule__special-row"
+                            >
+                                <mt-datepicker
+                                    v-model="special.date"
+                                    date-type="date"
+                                    :label="$tc('kmh-pickup-location.schedule.labelDate')"
+                                />
+                                <mt-switch
+                                    v-model="special.closed"
+                                    :label="$tc('kmh-pickup-location.schedule.labelClosed')"
+                                />
+                                <mt-text-field
+                                    v-if="!special.closed"
+                                    v-model="special.openTime"
+                                    :label="$tc('kmh-pickup-location.schedule.labelOpen')"
+                                    placeholder="09:00"
+                                />
+                                <mt-text-field
+                                    v-if="!special.closed"
+                                    v-model="special.closeTime"
+                                    :label="$tc('kmh-pickup-location.schedule.labelClose')"
+                                    placeholder="13:00"
+                                    :error="specialError(special) ? { detail: specialError(special) } : null"
+                                />
+                                <mt-button size="x-small" variant="critical" ghost @click="removeSpecialHour(special)">
+                                    <mt-icon name="regular-trash" size="16px" />
+                                </mt-button>
+                            </div>
+
+                            <div class="kmh-pickup-location-schedule__special-actions">
+                                <mt-button size="x-small" variant="secondary" @click="addSpecialHour">
+                                    {{ $tc('kmh-pickup-location.schedule.addSpecial') }}
+                                </mt-button>
+                            </div>
+                        </div>
+                    </template>
+                </sw-collapse>
+            </mt-card>
+        {% endblock %}
+    </div>
+{% endblock %}

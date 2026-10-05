@@ -1,54 +1,54 @@
 {
   "main.js": {
-    "file": "assets/kommandhub-click-and-pick-s-w-DgfmPA6W.js",
-    "name": "kommandhub-click-and-pick-s-w",
+    "file": "assets/kmh-click-and-pick-s-w-DNe8tf8a.js",
+    "name": "kmh-click-and-pick-s-w",
     "src": "main.js",
     "isEntry": true,
     "dynamicImports": [
-      "module/kommandhub-pickup-location/component/kommandhub-pickup-location-base-form/index.js",
-      "module/kommandhub-pickup-location/component/kommandhub-pickup-location-schedule/index.js",
-      "module/kommandhub-pickup-location/page/kommandhub-pickup-location-list/index.js",
-      "module/kommandhub-pickup-location/page/kommandhub-pickup-location-create/index.js",
-      "module/kommandhub-order-pickup-info/component/kommandhub-order-pickup-info-tab/index.js"
+      "module/kmh-pickup-location/component/kmh-pickup-location-base-form/index.js",
+      "module/kmh-pickup-location/component/kmh-pickup-location-schedule/index.js",
+      "module/kmh-pickup-location/page/kmh-pickup-location-list/index.js",
+      "module/kmh-pickup-location/page/kmh-pickup-location-create/index.js",
+      "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js"
     ]
   },
-  "module/kommandhub-order-pickup-info/component/kommandhub-order-pickup-info-tab/index.js": {
-    "file": "assets/index-BcPBqSlw.js",
+  "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js": {
+    "file": "assets/index-xFLI0wRK.js",
     "name": "index",
-    "src": "module/kommandhub-order-pickup-info/component/kommandhub-order-pickup-info-tab/index.js",
+    "src": "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js",
     "isDynamicEntry": true,
     "css": [
-      "assets/index-Hs1lYgh2.css"
+      "assets/index-C4GmLuoY.css"
     ]
   },
-  "module/kommandhub-pickup-location/component/kommandhub-pickup-location-base-form/index.js": {
-    "file": "assets/index-DSFBPqdm.js",
+  "module/kmh-pickup-location/component/kmh-pickup-location-base-form/index.js": {
+    "file": "assets/index-K27ZqU86.js",
     "name": "index",
-    "src": "module/kommandhub-pickup-location/component/kommandhub-pickup-location-base-form/index.js",
+    "src": "module/kmh-pickup-location/component/kmh-pickup-location-base-form/index.js",
     "isDynamicEntry": true
   },
-  "module/kommandhub-pickup-location/component/kommandhub-pickup-location-schedule/index.js": {
-    "file": "assets/index-Cba5jXe_.js",
+  "module/kmh-pickup-location/component/kmh-pickup-location-schedule/index.js": {
+    "file": "assets/index-CKUcrORx.js",
     "name": "index",
-    "src": "module/kommandhub-pickup-location/component/kommandhub-pickup-location-schedule/index.js",
+    "src": "module/kmh-pickup-location/component/kmh-pickup-location-schedule/index.js",
     "isDynamicEntry": true,
     "css": [
-      "assets/index-C1L8ecIL.css"
+      "assets/index-DFivY_cR.css"
     ]
   },
-  "module/kommandhub-pickup-location/page/kommandhub-pickup-location-create/index.js": {
-    "file": "assets/index-SEkHnCna.js",
+  "module/kmh-pickup-location/page/kmh-pickup-location-create/index.js": {
+    "file": "assets/index-B62MuYUK.js",
     "name": "index",
-    "src": "module/kommandhub-pickup-location/page/kommandhub-pickup-location-create/index.js",
+    "src": "module/kmh-pickup-location/page/kmh-pickup-location-create/index.js",
     "isDynamicEntry": true
   },
-  "module/kommandhub-pickup-location/page/kommandhub-pickup-location-list/index.js": {
-    "file": "assets/index-B9NnYE0U.js",
+  "module/kmh-pickup-location/page/kmh-pickup-location-list/index.js": {
+    "file": "assets/index-CC2ug-9B.js",
     "name": "index",
-    "src": "module/kommandhub-pickup-location/page/kommandhub-pickup-location-list/index.js",
+    "src": "module/kmh-pickup-location/page/kmh-pickup-location-list/index.js",
     "isDynamicEntry": true,
     "css": [
-      "assets/index-ESagiIEH.css"
+      "assets/index-D0pqWfV9.css"
     ]
   }
 }

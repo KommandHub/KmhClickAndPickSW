@@ -18,6 +18,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -30,7 +31,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('shopware.entity.definition', ['entity' => OrderPickupLocationDefinition::ENTITY_NAME])]
 class OrderPickupLocationDefinition extends EntityDefinition
 {
-    final public const ENTITY_NAME = 'kommandhub_order_pickup_location';
+    final public const ENTITY_NAME = 'kmh_order_pickup_location';
 
     public function getEntityName(): string
     {
@@ -51,6 +52,10 @@ class OrderPickupLocationDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey(), new ApiAware()),
+            // Versioned like the order it belongs to. Without its own version the
+            // Administration's order draft (clone) re-pointed this very row at the
+            // draft version, and discarding or merging the draft cascade-deleted it.
+            (new VersionField())->addFlags(new ApiAware()),
 
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new ApiAware()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),

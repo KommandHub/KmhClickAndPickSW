@@ -1,5 +1,5 @@
 {% block pickup_time_select_option_container %}
-    <option value="">{{ "general.kommandhub-click-and-pick.pickupTimeField.placeholder" | trans }}</option>
+    <option value="">{{ "general.kmh-click-and-pick.pickupTimeField.placeholder" | trans }}</option>
     {# `false` timezone keeps each slot in the location's own zone (no server-tz shift). #}
     {% for slot in slots %}
         <option value="{{ slot|date('c', false) }}">{{ slot|date('H:i', false) }}</option>

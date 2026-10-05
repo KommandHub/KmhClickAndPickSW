@@ -64,15 +64,15 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
                     'senderName' => '{{ salesChannel.name }}',
                     'subject' => 'Order ready for pickup',
                     'description' => 'Your order is ready for pickup',
-                    'contentHtml' => $this->getPickupReadyContentHtmlEn(),
-                    'contentPlain' => $this->getPickupReadyContentPlainEn(),
+                    'contentHtml' => self::getPickupReadyContentHtmlEn(),
+                    'contentPlain' => self::getPickupReadyContentPlainEn(),
                 ],
                 'de-DE' => [
                     'senderName' => '{{ salesChannel.name }}',
                     'subject' => 'Bestellung abholbereit',
                     'description' => 'Ihre Bestellung ist abholbereit',
-                    'contentHtml' => $this->getPickupReadyContentHtmlDe(),
-                    'contentPlain' => $this->getPickupReadyContentPlainDe(),
+                    'contentHtml' => self::getPickupReadyContentHtmlDe(),
+                    'contentPlain' => self::getPickupReadyContentPlainDe(),
                 ]
             ]
         );
@@ -104,15 +104,15 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
                     'senderName' => '{{ salesChannel.name }}',
                    'subject' => 'New pickup order received - #{{ order.orderNumber }}',
                    'description' => 'Internal admin notification when a pickup order is placed',
-                    'contentHtml' => $this->getAdminOrderPlacedContentHtmlEn(),
-                    'contentPlain' => $this->getAdminOrderPlacedContentPlainEn(),
+                    'contentHtml' => self::getAdminOrderPlacedContentHtmlEn(),
+                    'contentPlain' => self::getAdminOrderPlacedContentPlainEn(),
                 ],
                 'de-DE' => [
                     'senderName' => '{{ salesChannel.name }}',
                    'subject' => 'Neue Abholbestellung erhalten - #{{ order.orderNumber }}',
                    'description' => 'Interne Admin-Benachrichtigung bei einer neuen Abholbestellung',
-                    'contentHtml' => $this->getAdminOrderPlacedContentHtmlDe(),
-                    'contentPlain' => $this->getAdminOrderPlacedContentPlainDe(),
+                    'contentHtml' => self::getAdminOrderPlacedContentHtmlDe(),
+                    'contentPlain' => self::getAdminOrderPlacedContentPlainDe(),
                 ]
             ]
         );
@@ -277,14 +277,23 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
     }
 
     // Pickup Ready Content - English
-    private function getPickupReadyContentHtmlEn(): string
+    public static function getPickupReadyContentHtmlEn(): string
     {
         return <<<MAIL
         <div style="font-family:arial; font-size:12px;">
+            {% set pickupTz = pickupLocation.timezone|default('UTC') %}
             <p>
                 Dear {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},
                 <br><br>
                 We are pleased to inform you that your order {{ order.orderNumber }} is now ready for pickup.<br><br>
+                {% if pickupLocation %}
+                    <strong>Where to collect:</strong><br>
+                    {{ pickupLocation.name }}<br>
+                    {{ pickupLocation.street }}<br>
+                    {% if pickupLocation.postalCode %}{{ pickupLocation.postalCode }} {% endif %}{{ pickupLocation.city }}<br>
+                    {% if pickupOrderLocation.pickupTime %}<br><strong>Pickup time:</strong> {{ pickupOrderLocation.pickupTime|format_datetime('medium', 'short', locale='en-GB', timezone=pickupTz) }}<br>{% endif %}
+                    <br>
+                {% endif %}
                 Please bring a valid ID and your order confirmation when collecting your order.<br><br>
                 If you have any questions, feel free to contact us.<br><br>
                 Best regards,<br>
@@ -294,12 +303,21 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
         MAIL;
     }
 
-    private function getPickupReadyContentPlainEn(): string
+    public static function getPickupReadyContentPlainEn(): string
     {
         return <<<MAIL
+        {% set pickupTz = pickupLocation.timezone|default('UTC') %}
         Dear {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},
 
         Your order {{ order.orderNumber }} is now ready for pickup.
+        {% if pickupLocation %}
+        Where to collect:
+        {{ pickupLocation.name }}
+        {{ pickupLocation.street }}
+        {% if pickupLocation.postalCode %}{{ pickupLocation.postalCode }} {% endif %}{{ pickupLocation.city }}
+        {% if pickupOrderLocation.pickupTime %}Pickup time: {{ pickupOrderLocation.pickupTime|format_datetime('medium', 'short', locale='en-GB', timezone=pickupTz) }}
+        {% endif %}
+        {% endif %}
         Please bring a valid ID and your order confirmation when collecting your order.
 
         Best regards,
@@ -308,14 +326,23 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
     }
 
     // Pickup Ready Content - German
-    private function getPickupReadyContentHtmlDe(): string
+    public static function getPickupReadyContentHtmlDe(): string
     {
         return <<<MAIL
         <div style="font-family:arial; font-size:12px;">
+            {% set pickupTz = pickupLocation.timezone|default('UTC') %}
             <p>
                 Sehr geehrte/r {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},
                 <br><br>
                 wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung {{ order.orderNumber }} ab sofort zur Abholung bereitsteht.<br><br>
+                {% if pickupLocation %}
+                    <strong>Abholort:</strong><br>
+                    {{ pickupLocation.name }}<br>
+                    {{ pickupLocation.street }}<br>
+                    {% if pickupLocation.postalCode %}{{ pickupLocation.postalCode }} {% endif %}{{ pickupLocation.city }}<br>
+                    {% if pickupOrderLocation.pickupTime %}<br><strong>Abholzeit:</strong> {{ pickupOrderLocation.pickupTime|format_datetime('medium', 'short', locale='de-DE', timezone=pickupTz) }}<br>{% endif %}
+                    <br>
+                {% endif %}
                 Bitte bringen Sie zur Abholung einen gültigen Ausweis sowie Ihre Bestellbestätigung mit.<br><br>
                 Bei Rückfragen stehen wir Ihnen gerne zur Verfügung.<br><br>
                 Mit freundlichen Grüßen<br>
@@ -325,12 +352,21 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
         MAIL;
     }
 
-    private function getPickupReadyContentPlainDe(): string
+    public static function getPickupReadyContentPlainDe(): string
     {
         return <<<MAIL
+        {% set pickupTz = pickupLocation.timezone|default('UTC') %}
         Sehr geehrte/r {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},
 
         Ihre Bestellung {{ order.orderNumber }} ist jetzt abholbereit.
+        {% if pickupLocation %}
+        Abholort:
+        {{ pickupLocation.name }}
+        {{ pickupLocation.street }}
+        {% if pickupLocation.postalCode %}{{ pickupLocation.postalCode }} {% endif %}{{ pickupLocation.city }}
+        {% if pickupOrderLocation.pickupTime %}Abholzeit: {{ pickupOrderLocation.pickupTime|format_datetime('medium', 'short', locale='de-DE', timezone=pickupTz) }}
+        {% endif %}
+        {% endif %}
         Bitte bringen Sie zur Abholung einen gültigen Ausweis sowie Ihre Bestellbestätigung mit.
 
         Mit freundlichen Grüßen,
@@ -339,18 +375,19 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
     }
 
     // Admin Order Placed Content - English
-    private function getAdminOrderPlacedContentHtmlEn(): string
+    public static function getAdminOrderPlacedContentHtmlEn(): string
     {
         return <<<MAIL
         <div style="font-family:arial; font-size:12px;">
             {% set currencyIsoCode = order.currency.isoCode %}
+            {% set pickupTz = pickupOrderLocation.pickupLocation.timezone|default('UTC') %}
             A new pickup order has been placed and requires preparation for collection.<br>
             <br>
             Order number: {{ order.orderNumber }}<br>
             Customer: {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }}<br>
             Ordered on: {{ order.orderDateTime|format_datetime('medium', 'short', locale='en-GB') }}<br>
             {% set pickupTime = pickupOrderLocation.pickupTime %}
-            {% if pickupTime %}Requested pickup time: {{ pickupTime|format_datetime('medium', 'short', locale='en-GB') }}<br>{% endif %}
+            {% if pickupTime %}Requested pickup time: {{ pickupTime|format_datetime('medium', 'short', locale='en-GB', timezone=pickupTz) }}<br>{% endif %}
             {% if pickupOrderLocation.comment %}Customer note: {{ pickupOrderLocation.comment }}<br>{% endif %}
             <br>
             Please prepare the order for pickup and ensure it is ready when the customer arrives.<br>
@@ -521,18 +558,21 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
         MAIL;
     }
 
-    private function getAdminOrderPlacedContentPlainEn(): string
+    public static function getAdminOrderPlacedContentPlainEn(): string
     {
         return <<<MAIL
         {% set currencyIsoCode = order.currency.isoCode %}
+        {% set pickupTz = pickupOrderLocation.pickupLocation.timezone|default('UTC') %}
         A new pickup order has been placed and requires preparation for collection.
 
         Order number: {{ order.orderNumber }}
         Customer: {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }}
         Ordered on: {{ order.orderDateTime|format_datetime('medium', 'short', locale='en-GB') }}
         {% set pickupTime = pickupOrderLocation.pickupTime %}
-        {% if pickupTime %}Requested pickup time: {{ pickupTime|format_datetime('medium', 'short', locale='en-GB') }}{% endif %}
-        {% if pickupOrderLocation.comment %}Customer note: {{ pickupOrderLocation.comment }}{% endif %}
+        {% if pickupTime %}Requested pickup time: {{ pickupTime|format_datetime('medium', 'short', locale='en-GB', timezone=pickupTz) }}
+        {% endif %}
+        {% if pickupOrderLocation.comment %}Customer note: {{ pickupOrderLocation.comment }}
+        {% endif %}
 
         Please prepare the order for pickup and ensure it is ready when the customer arrives.
 
@@ -638,12 +678,13 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
     }
 
     // Admin Order Placed Content - German
-    private function getAdminOrderPlacedContentHtmlDe(): string
+    public static function getAdminOrderPlacedContentHtmlDe(): string
     {
         return <<<MAIL
         <div style="font-family:arial; font-size:12px;">
 
             {% set currencyIsoCode = order.currency.isoCode %}
+            {% set pickupTz = pickupOrderLocation.pickupLocation.timezone|default('UTC') %}
 
             Eine neue Abholbestellung wurde aufgegeben und muss für die Abholung vorbereitet werden.<br>
             <br>
@@ -651,7 +692,7 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
             Kunde: {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }}<br>
             Bestelldatum: {{ order.orderDateTime|format_datetime('medium', 'short', locale='de-DE') }}<br>
             {% set pickupTime = pickupOrderLocation.pickupTime %}
-            {% if pickupTime %}Gewünschte Abholzeit: {{ pickupTime|format_datetime('medium', 'short', locale='de-DE') }}<br>{% endif %}
+            {% if pickupTime %}Gewünschte Abholzeit: {{ pickupTime|format_datetime('medium', 'short', locale='de-DE', timezone=pickupTz) }}<br>{% endif %}
             {% if pickupOrderLocation.comment %}Kundenhinweis: {{ pickupOrderLocation.comment }}<br>{% endif %}
             <br>
             Bitte bereiten Sie die Bestellung zur Abholung durch den Kunden vor.<br>
@@ -821,18 +862,21 @@ class Migration1760113852PickupReadyMailTemplate extends MigrationStep
         MAIL;
     }
 
-    private function getAdminOrderPlacedContentPlainDe(): string
+    public static function getAdminOrderPlacedContentPlainDe(): string
     {
         return <<<MAIL
         {% set currencyIsoCode = order.currency.isoCode %}
+        {% set pickupTz = pickupOrderLocation.pickupLocation.timezone|default('UTC') %}
         Eine neue Abholbestellung wurde aufgegeben und muss für die Abholung vorbereitet werden.
 
         Bestellnummer: {{ order.orderNumber }}
         Kunde: {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }}
         Bestelldatum: {{ order.orderDateTime|format_datetime('medium', 'short', locale='de-DE') }}
         {% set pickupTime = pickupOrderLocation.pickupTime %}
-        {% if pickupTime %}Gewünschte Abholzeit: {{ pickupTime|format_datetime('medium', 'short', locale='de-DE') }}{% endif %}
-        {% if pickupOrderLocation.comment %}Kundenhinweis: {{ pickupOrderLocation.comment }}{% endif %}
+        {% if pickupTime %}Gewünschte Abholzeit: {{ pickupTime|format_datetime('medium', 'short', locale='de-DE', timezone=pickupTz) }}
+        {% endif %}
+        {% if pickupOrderLocation.comment %}Kundenhinweis: {{ pickupOrderLocation.comment }}
+        {% endif %}
 
         Bitte bereiten Sie die Bestellung zur Abholung vor und stellen Sie sicher, dass sie zum Zeitpunkt der Abholung bereit ist.
 

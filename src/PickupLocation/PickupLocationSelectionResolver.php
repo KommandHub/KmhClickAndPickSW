@@ -7,7 +7,7 @@ namespace Kommandhub\ClickAndPickSW\PickupLocation;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupSelection;
 use Kommandhub\ClickAndPickSW\Entity\PickupLocation\PickupLocationEntity;
-use Kommandhub\ClickAndPickSW\KommandhubClickAndPickSW;
+use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -30,14 +30,14 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 readonly class PickupLocationSelectionResolver
 {
     public function __construct(
-        private EntityRepository $kommandhubPickupLocationRepository,
+        private EntityRepository $kmhPickupLocationRepository,
         private PickupContextStorage $pickupContextStorage,
     ) {
     }
 
     public function isPickupShippingMethod(SalesChannelContext $context): bool
     {
-        return $context->getShippingMethod()->getId() === KommandhubClickAndPickSW::SHIPPING_METHOD_ID;
+        return $context->getShippingMethod()->getId() === KmhClickAndPickSW::SHIPPING_METHOD_ID;
     }
 
     public function resolve(SalesChannelContext $context): ?PickupLocationEntity
@@ -76,7 +76,7 @@ readonly class PickupLocationSelectionResolver
         $criteria->addAssociation('openingHoursSchedule');
         $criteria->addAssociation('specialHours');
 
-        $pickupLocation = $this->kommandhubPickupLocationRepository
+        $pickupLocation = $this->kmhPickupLocationRepository
             ->search($criteria, $context->getContext())
             ->first();
 

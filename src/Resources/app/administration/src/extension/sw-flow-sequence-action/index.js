@@ -1,4 +1,4 @@
-import { ACTION, GROUP } from '../../constant/kommandhub-pickup-notify-action.constant';
+import { ACTION, GROUP } from '../../constant/kmh-pickup-notify-action.constant';
 
 const { Component, Application } = Shopware;
 
@@ -44,7 +44,7 @@ Component.override('sw-flow-sequence-action', {
                 return {
                     value: actionName,
                     icon: 'regular-envelope',
-                    label: this.$tc('kommandhub-pickup-notify-action.titleSendNotification'),
+                    label: this.$tc('kmh-pickup-notify-action.titleSendNotification'),
                     group: GROUP,
                 };
             }
@@ -53,7 +53,7 @@ Component.override('sw-flow-sequence-action', {
                 return {
                     value: actionName,
                     icon: 'regular-comments',
-                    label: this.$tc('kommandhub-pickup-sms-action.titleSendSms'),
+                    label: this.$tc('kmh-pickup-sms-action.titleSendSms'),
                     group: GROUP,
                 };
             }
@@ -63,11 +63,11 @@ Component.override('sw-flow-sequence-action', {
 
         getActionDescriptions(sequence) {
             if (sequence.actionName === ACTION.PICKUP_NOTIFY_ADMIN) {
-                return this.$tc('kommandhub-pickup-notify-action.description');
+                return this.$tc('kmh-pickup-notify-action.description');
             }
 
             if (sequence.actionName === ACTION.PICKUP_NOTIFY_SMS) {
-                return this.$tc('kommandhub-pickup-sms-action.description');
+                return this.$tc('kmh-pickup-sms-action.description');
             }
 
             return this.$super('getActionDescriptions', sequence);

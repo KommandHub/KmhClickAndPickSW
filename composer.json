@@ -2,7 +2,7 @@
     "name": "kommandhub/click-and-pick-sw",
     "description": "Click and collect for Shopware 6: pickup-location selection in checkout, a self-pickup shipping method and a pay-on-pickup payment method, with pickup-ready order state and mail automation.",
     "type": "shopware-platform-plugin",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "license": "proprietary",
     "keywords": [
         "shopware",
@@ -27,8 +27,8 @@
     ],
     "support": {
         "email": "admin@kommandhub.com",
-        "source": "https://github.com/KommandHub/KommandhubClickAndPickSW",
-        "issues": "https://github.com/KommandHub/KommandhubClickAndPickSW/issues"
+        "source": "https://github.com/KommandHub/KmhClickAndPickSW",
+        "issues": "https://github.com/KommandHub/KmhClickAndPickSW/issues"
     },
     "require": {
         "shopware/core": "~6.7.0",
@@ -52,7 +52,7 @@
         }
     },
     "extra": {
-        "shopware-plugin-class": "Kommandhub\\ClickAndPickSW\\KommandhubClickAndPickSW",
+        "shopware-plugin-class": "Kommandhub\\ClickAndPickSW\\KmhClickAndPickSW",
         "copyright": "(c) by Kommandhub Limited",
         "label": {
             "de-DE": "Click and Pick (Selbstabholung)",
