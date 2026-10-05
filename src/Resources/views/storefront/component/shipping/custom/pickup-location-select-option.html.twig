@@ -1,6 +1,6 @@
 {% block pickup_location_select_option_container %}
     {% if not selectionDisabled %}
-        <option value="" data-pickup-location-location-field-id-option>Please select</option>
+        <option value="" data-pickup-location-location-field-id-option>{{ "general.kmh-click-and-pick.pickupLocationField.placeholder" | trans }}</option>
     {% endif %}
     {% for location in locations %}
         <option class="pickup-location-location-field-id-option" value="{{ location.id }}"

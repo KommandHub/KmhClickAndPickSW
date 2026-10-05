@@ -3,14 +3,16 @@
     "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
-      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
+      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time.",
+      "pickupTimeRequired": "Please choose a pickup time before placing your order."
     }
   },
   "error": {
     "kmh-click-and-pick": {
       "pickupLocationRequired": "Please select a valid pickup location before placing your order.",
       "unsupportedDeliveryMethod": "The selected delivery method \"%deliveryMethodName%\" is not supported for the chosen payment method. Please select a different delivery method.",
-      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time."
+      "invalidPickupTime": "The selected pickup time is outside the location's opening hours. Please choose an available time.",
+      "pickupTimeRequired": "Please choose a pickup time before placing your order."
     }
   },
   "general": {
@@ -34,6 +36,10 @@
         "email": "Email",
         "pickupTime": "Pickup time",
         "pickupComment": "Notes"
+      },
+      "pickupLocationField": {
+        "label": "Select pickup location",
+        "placeholder": "Please select"
       },
       "pickupTimeField": {
         "dateLabel": "Pickup date",

@@ -144,7 +144,7 @@ class SendSmsToPickupLocationActionTest extends TestCase
     {
         $record = new OrderPickupLocationEntity();
         $record->setId('cccccccccccccccccccccccccccccccc');
-        $record->setPickupTime(new \DateTimeImmutable('2024-06-03 10:30:00'));
+        $record->setPickupTime(new \DateTimeImmutable('2024-06-03 10:30:00', new \DateTimeZone('UTC')));
 
         $gateway = $this->createMock(SmsGateway::class);
         $gateway->method('isConfigured')->willReturn(true);
@@ -161,6 +161,46 @@ class SendSmsToPickupLocationActionTest extends TestCase
         $action = new SendSmsToPickupLocationAction($this->logger, $gateway);
 
         $action->handleFlow($this->flow($this->order(), $this->location('+2348012345678'), $record));
+    }
+
+    public function testPickupTimeIsGivenInTheLocationsTimezone(): void
+    {
+        $record = new OrderPickupLocationEntity();
+        $record->setId('cccccccccccccccccccccccccccccccc');
+        $record->setPickupTime(new \DateTimeImmutable('2024-06-03 09:00:00', new \DateTimeZone('UTC')));
+
+        $location = $this->location('+2348012345678');
+        $location->setTimezone('Africa/Lagos');
+
+        $gateway = $this->createMock(SmsGateway::class);
+        $gateway->method('isConfigured')->willReturn(true);
+        $gateway->expects(static::once())->method('send')->with(
+            '2348012345678',
+            'Pickup order 10001 for Downtown Store. Pickup time: 2024-06-03 10:00.',
+            self::SALES_CHANNEL_ID
+        );
+
+        (new SendSmsToPickupLocationAction($this->logger, $gateway))->handleFlow($this->flow($this->order(), $location, $record));
+    }
+
+    public function testInvalidLocationTimezoneFallsBackToUtc(): void
+    {
+        $record = new OrderPickupLocationEntity();
+        $record->setId('cccccccccccccccccccccccccccccccc');
+        $record->setPickupTime(new \DateTimeImmutable('2024-06-03 09:00:00', new \DateTimeZone('UTC')));
+
+        $location = $this->location('+2348012345678');
+        $location->setTimezone('Not/AZone');
+
+        $gateway = $this->createMock(SmsGateway::class);
+        $gateway->method('isConfigured')->willReturn(true);
+        $gateway->expects(static::once())->method('send')->with(
+            '2348012345678',
+            'Pickup order 10001 for Downtown Store. Pickup time: 2024-06-03 09:00.',
+            self::SALES_CHANNEL_ID
+        );
+
+        (new SendSmsToPickupLocationAction($this->logger, $gateway))->handleFlow($this->flow($this->order(), $location, $record));
     }
 
     private function flow(OrderEntity $order, PickupLocationEntity $location, ?OrderPickupLocationEntity $record = null): StorableFlow

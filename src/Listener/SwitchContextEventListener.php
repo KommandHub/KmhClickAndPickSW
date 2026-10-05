@@ -8,6 +8,7 @@ use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextKeys;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\PickupContextStorage;
 use Kommandhub\ClickAndPickSW\Checkout\PickupSelection\StoredPickupSelection;
 use Kommandhub\ClickAndPickSW\KmhClickAndPickSW;
+use Kommandhub\ClickAndPickSW\PickupLocation\DefaultPickupLocationProvider;
 use Kommandhub\ClickAndPickSW\PickupLocation\PickupLocationValidator;
 use Shopware\Core\Framework\Routing\Event\SalesChannelContextResolvedEvent;
 use Shopware\Core\Framework\Struct\ArrayStruct;
@@ -41,6 +42,7 @@ readonly class SwitchContextEventListener
     public function __construct(
         private PickupContextStorage $pickupContextStorage,
         private PickupLocationValidator $pickupLocationValidator,
+        private DefaultPickupLocationProvider $defaultPickupLocationProvider,
     ) {
     }
 
@@ -59,7 +61,11 @@ readonly class SwitchContextEventListener
             return;
         }
 
-        $pickupLocationId = $this->normalize($requestData->get(PickupContextKeys::LOCATION_ID));
+        // With customer selection switched off the location is locked to the
+        // channel's default; whatever the request posted is ignored.
+        $pickupLocationId = $this->defaultPickupLocationProvider->isSelectionEnabled($context->getSalesChannelId())
+            ? $this->normalize($requestData->get(PickupContextKeys::LOCATION_ID))
+            : $this->defaultPickupLocationProvider->getDefaultLocationId($context);
 
         // Field present but empty — the customer explicitly removed the pickup
         // location (the remove control), so clear the whole selection.
@@ -96,6 +102,17 @@ readonly class SwitchContextEventListener
         }
 
         $stored = $this->pickupContextStorage->load($context);
+
+        // Selection switched off: pre-select (and persist, so the cart validator
+        // sees it) the channel's default location.
+        if ($stored->isEmpty() && !$this->defaultPickupLocationProvider->isSelectionEnabled($context->getSalesChannelId())) {
+            $defaultLocationId = $this->defaultPickupLocationProvider->getDefaultLocationId($context);
+
+            if ($defaultLocationId !== null) {
+                $stored = new StoredPickupSelection($defaultLocationId);
+                $this->pickupContextStorage->save($context, $stored);
+            }
+        }
 
         if ($stored->isEmpty()) {
             return;

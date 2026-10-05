@@ -17,5 +17,15 @@
   "kmh-pickup-sms-action": {
     "titleSendSms": "Send pickup SMS to location",
     "description": "Text the order's pickup location (requires the SMS plugin to be installed and active)"
+  },
+  "sw-flow-custom-event": {
+    "flow-list": {
+      "pickup_order_placed": "Pickup order placed",
+      "pickup_order_ready": "Pickup order ready"
+    },
+    "event-tree": {
+      "pickup": "Pickup",
+      "ready": "Ready"
+    }
   }
 }

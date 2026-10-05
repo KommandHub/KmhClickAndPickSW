@@ -24,6 +24,9 @@ class SalesChannelPickupLocationController extends StorefrontController
 {
     private const EARTH_RADIUS_KM = 6371.0;
 
+    /** How far ahead a location must have opening hours to be offered. */
+    public const BOOKING_WINDOW_DAYS = 14;
+
     public function __construct(
         private readonly EntityRepository $kmhPickupLocationRepository,
         private readonly PickupLocationAvailabilityService $availabilityService,
@@ -71,10 +74,10 @@ class SalesChannelPickupLocationController extends StorefrontController
             ->getEntities()
             ->getElements());
 
-        // List everything open *today* (in each location's timezone) so a
-        // customer can still choose a location that opens later today — not only
-        // one open at this exact minute.
-        $openLocations = $this->availabilityService->filterOpenOnDate($locations);
+        // Offer every location the customer can actually book: open on at least
+        // one day of the booking window, in each location's own timezone. The
+        // date picker and slot list then narrow it to a concrete time.
+        $openLocations = $this->availabilityService->filterOpenWithinDays($locations, self::BOOKING_WINDOW_DAYS);
 
         return $this->renderStorefront(
             '@KmhClickAndPickSW/storefront/component/shipping/custom/pickup-location-select-option.html.twig',

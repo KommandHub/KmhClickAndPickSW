@@ -96,11 +96,11 @@ class SalesChannelPickupLocationControllerTest extends TestCase
             )
             ->willReturn($searchResult);
 
-        // Listing filters to locations open *today* (selectable), not open-now.
+        // Listing filters to locations bookable within the booking window.
         $this->availabilityService
             ->expects(static::once())
-            ->method('filterOpenOnDate')
-            ->with([$open, $closed])
+            ->method('filterOpenWithinDays')
+            ->with([$open, $closed], SalesChannelPickupLocationController::BOOKING_WINDOW_DAYS)
             ->willReturn([$open]);
 
         $response = $this->controller->index('sales-channel-id', new Request(), $context);
@@ -168,8 +168,8 @@ class SalesChannelPickupLocationControllerTest extends TestCase
 
         $this->availabilityService
             ->expects(static::once())
-            ->method('filterOpenOnDate')
-            ->with([$defaultLocation])
+            ->method('filterOpenWithinDays')
+            ->with([$defaultLocation], SalesChannelPickupLocationController::BOOKING_WINDOW_DAYS)
             ->willReturn([$defaultLocation]);
 
         $response = $controller->index('sales-channel-id', new Request(), $context);
@@ -284,7 +284,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
         $location->setTimezone('Africa/Lagos');
 
         $searchResult = $this->createMock(EntitySearchResult::class);
-        $searchResult->method('first')->willReturn($location);
+        $searchResult->method('getEntities')->willReturn(new PickupLocationCollection([$location]));
         $context = $this->salesChannelContext();
 
         $this->repository->method('search')->willReturn($searchResult);
@@ -341,7 +341,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
         $location->setTimezone('Not/AZone');
 
         $searchResult = $this->createMock(EntitySearchResult::class);
-        $searchResult->method('first')->willReturn($location);
+        $searchResult->method('getEntities')->willReturn(new PickupLocationCollection([$location]));
 
         $this->repository->method('search')->willReturn($searchResult);
         $this->slotService
@@ -374,7 +374,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
         $location->setTimezone('UTC');
 
         $searchResult = $this->createMock(EntitySearchResult::class);
-        $searchResult->method('first')->willReturn($location);
+        $searchResult->method('getEntities')->willReturn(new PickupLocationCollection([$location]));
 
         $this->repository->method('search')->willReturn($searchResult);
         $this->slotService->expects(static::never())->method('getSlots');
@@ -402,7 +402,7 @@ class SalesChannelPickupLocationControllerTest extends TestCase
         $searchResult = $this->createMock(EntitySearchResult::class);
         $searchResult->method('getEntities')->willReturn(new PickupLocationCollection($locations));
         $this->repository->method('search')->willReturn($searchResult);
-        $this->availabilityService->method('filterOpenOnDate')->willReturnArgument(0);
+        $this->availabilityService->method('filterOpenWithinDays')->willReturnArgument(0);
 
         $this->controller->index('sales-channel-id', new Request($query), $this->salesChannelContext());
 

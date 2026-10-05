@@ -1,4 +1,29 @@
+# Unreleased
+
+## Fixed
+- Opening an order in the Administration no longer deletes its pickup details.
+  `kmh_order_pickup_location` is now versioned (`version_id`, primary key
+  `(id, version_id)`) like Shopware's own order children; before, the order
+  draft re-pointed the record at the draft version and discarding or merging the
+  draft cascade-deleted it. Migration `1760600001` converts existing installs and
+  moves records stranded on a draft back to the live order.
+- Installs updated from an earlier 0.9.0 now get `default_sales_channel_id`
+  (migration `1760600000`, backfilled from each location's sales channels).
+- Locations closed today are offered again: the checkout lists every location
+  open on at least one day of the next 14 days (special dates included).
+- With *Enable pickup location selection* off, checkout now pre-selects and locks
+  the location whose Default Sales Channel is the storefront (as the setting's help
+  text describes) instead of hiding the selector and blocking checkout.
+- A pickup time is required: placing a self-pickup order without one is blocked
+  with *"Please choose a pickup time before placing your order."*
+- The SMS to the pickup location gives the pickup time in the location's time zone.
+- The date picker's default and minimum use the customer's local date.
+- Translated the location field label and placeholder (en, de, fr) and the Flow
+  Builder trigger names (*Pickup order placed* / *Pickup order ready*).
+- Order *Pickup information* tab: space between postal code and city.
+
 # 0.9.0
+
 
 First public (pre-1.0) release of Click and Pick for Shopware 6.7. Feature-complete
 and fully unit/integration tested; the API and database schema may still change

@@ -6,6 +6,7 @@ namespace Kommandhub\ClickAndPickSW\Tests\Unit\Checkout\Cart;
 
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\InvalidPickupTimeCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupLocationRequiredCartBlockerError;
+use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\PickupTimeRequiredCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\Error\UnsupportedDeliveryMethodCartBlockerError;
 use Kommandhub\ClickAndPickSW\Checkout\Cart\PayOnPickupCartProcessor;
 use Kommandhub\ClickAndPickSW\Checkout\Payment\PayOnPickupPaymentHandler;
@@ -39,6 +40,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 #[CoversClass(PayOnPickupCartProcessor::class)]
 #[UsesClass(PickupLocationRequiredCartBlockerError::class)]
+#[UsesClass(PickupTimeRequiredCartBlockerError::class)]
 #[UsesClass(InvalidPickupTimeCartBlockerError::class)]
 #[UsesClass(PickupLocationSelectionResolver::class)]
 #[UsesClass(PickupContextStorage::class)]
@@ -140,7 +142,7 @@ class PayOnPickupCartProcessorTest extends TestCase
         );
     }
 
-    public function testAllowsClickAndPickShippingWithValidPickupLocation(): void
+    public function testRequiresPickupTimeForValidPickupLocation(): void
     {
         $errors = new ErrorCollection();
         $context = $this->salesChannelContext(
@@ -182,7 +184,9 @@ class PayOnPickupCartProcessorTest extends TestCase
 
         $this->processor->validate(new Cart('token'), $errors, $context);
 
-        static::assertCount(0, $errors);
+        // A valid location alone is not enough: the store needs a pickup time.
+        static::assertCount(1, $errors);
+        static::assertInstanceOf(PickupTimeRequiredCartBlockerError::class, $errors->first());
     }
 
     public function testAddsBlockingErrorWhenClickAndPickShippingHasNoPickupLocation(): void
@@ -243,11 +247,12 @@ class PayOnPickupCartProcessorTest extends TestCase
         );
         static::assertNull($context->getExtension(PickupContextKeys::EXTENSION));
 
-        $this->storeSelection(self::LOCATION_ID);
+        // Monday 10:00 UTC, inside Monday 09:00–17:00.
+        $this->storeSelection(self::LOCATION_ID, '2024-06-03T10:00:00+00:00');
 
-        $pickupLocation = new PickupLocationEntity();
-        $pickupLocation->setId(self::LOCATION_ID);
-        $this->pickupLocationRepository->method('search')->willReturn($this->firstResult($pickupLocation));
+        $this->pickupLocationRepository->method('search')->willReturn(
+            $this->firstResult($this->location([[1, '09:00', '17:00']]))
+        );
 
         // Simulate several cart-calculation passes within a submission.
         for ($pass = 0; $pass < 5; ++$pass) {

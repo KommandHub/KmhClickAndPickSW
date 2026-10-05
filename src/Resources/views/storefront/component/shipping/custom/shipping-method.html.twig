@@ -3,7 +3,6 @@
 {% block component_shipping_method_label %}
     {{ parent() }}
 
-    {% if config('KmhClickAndPickSW.config.enablePickupLocationSelection') %}
     {% block component_shipping_method_label_kmh_self_pickup %}
         {% if shipping.technicalName is same as('kmh_self_pickup')%}
             {% block component_shipping_method_label_kmh_self_pickup_inner %}
@@ -20,7 +19,7 @@
                  data-sales-channel-pickup-location="true"
                  data-sales-channel-pickup-location-options="{{ salesChannelPickupLocationOptions|json_encode }}">
                 {% block component_shipping_method_label_kmh_self_pickup_field_label %}
-                    <label for="pickup-location-location-field-id">Select Pickup Location</label>
+                    <label for="pickup-location-location-field-id">{{ "general.kmh-click-and-pick.pickupLocationField.label" | trans }}</label>
                 {% endblock %}
                 {% block component_shipping_method_label_kmh_self_pickup_location_field %}
                     <select id="pickup-location-location-field-id"
@@ -28,9 +27,13 @@
                             class="form-control shipping-method-input"
                             {% if not enableSelection %}disabled{% endif %}>
                     </select>
+                    {% if not enableSelection and context.extensions.pickupLocation.id is not null %}
+                        {# The location is locked: a disabled select isn't submitted, so post it explicitly. #}
+                        <input type="hidden" name="pickupLocationId" value="{{ context.extensions.pickupLocation.id }}">
+                    {% endif %}
                 {% endblock %}
                 {% block component_shipping_method_label_kmh_self_pickup_geolocation %}
-                    {% if config('KmhClickAndPickSW.config.enableGeolocationSorting') %}
+                    {% if enableSelection and config('KmhClickAndPickSW.config.enableGeolocationSorting') %}
                         {# Shown by the JS plugin only with geolocation support + cookie consent. #}
                         <button type="button"
                                 class="btn btn-link btn-sm px-0 mt-1"
@@ -96,5 +99,4 @@
             {% endblock %}
         {% endif %}
     {% endblock %}
-    {% endif %}
 {% endblock %}

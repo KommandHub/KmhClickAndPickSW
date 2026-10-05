@@ -17,5 +17,15 @@
   "kmh-pickup-sms-action": {
     "titleSendSms": "Abhol-SMS an Standort senden",
     "description": "Sendet dem Abholort der Bestellung eine SMS (erfordert ein installiertes und aktives SMS-Plugin)"
+  },
+  "sw-flow-custom-event": {
+    "flow-list": {
+      "pickup_order_placed": "Abholbestellung aufgegeben",
+      "pickup_order_ready": "Abholbestellung abholbereit"
+    },
+    "event-tree": {
+      "pickup": "Abholung",
+      "ready": "Abholbereit"
+    }
   }
 }

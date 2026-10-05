@@ -50,7 +50,7 @@
                     <dt>{{ $tc('kmh-order-pickup-info.location.address') }}</dt>
                     <dd>
                         {{ pickupView.location.street }}<br>
-                        <template v-if="pickupView.location.postalCode">{{ pickupView.location.postalCode }} </template>{{ pickupView.location.city }}
+                        {{ [pickupView.location.postalCode, pickupView.location.city].filter(Boolean).join(' ') }}
                     </dd>
                 </div>
                 <div v-if="pickupView.location.phoneNumber" class="kmh-order-pickup-info__row">

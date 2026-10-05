@@ -1,6 +1,6 @@
 {
   "main.js": {
-    "file": "assets/kmh-click-and-pick-s-w-BL3wpqbL.js",
+    "file": "assets/kmh-click-and-pick-s-w-Dt_ihzzQ.js",
     "name": "kmh-click-and-pick-s-w",
     "src": "main.js",
     "isEntry": true,
@@ -13,7 +13,7 @@
     ]
   },
   "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js": {
-    "file": "assets/index-D1zdhIYY.js",
+    "file": "assets/index-C53lAQvZ.js",
     "name": "index",
     "src": "module/kmh-order-pickup-info/component/kmh-order-pickup-info-tab/index.js",
     "isDynamicEntry": true,

@@ -179,6 +179,30 @@ class PickupLocationAvailabilityService
     }
 
     /**
+     * Locations open on at least one of the next `$days` local dates, today
+     * included (special dates count). This is what a customer can book, so a
+     * location closed today stays selectable for a later day.
+     *
+     * @param iterable<PickupLocationEntity> $locations
+     *
+     * @return list<PickupLocationEntity>
+     */
+    public function filterOpenWithinDays(iterable $locations, int $days, ?\DateTimeImmutable $reference = null): array
+    {
+        $reference ??= new \DateTimeImmutable('now');
+
+        return $this->filterBy($locations, function (PickupLocationEntity $location) use ($days, $reference): bool {
+            for ($offset = 0; $offset < max(1, $days); ++$offset) {
+                if ($this->isOpenOnDate($location, $reference->modify(sprintf('+%d days', $offset)))) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
      * @param iterable<PickupLocationEntity> $locations
      * @param callable(PickupLocationEntity): bool $predicate
      *

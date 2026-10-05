@@ -3,14 +3,16 @@
     "kmh-click-and-pick": {
       "pickupLocationRequired": "Veuillez sélectionner un lieu de retrait valide avant de passer votre commande.",
       "unsupportedDeliveryMethod": "Le mode de livraison sélectionné « \"%deliveryMethodName%\" » n'est pas pris en charge pour le mode de paiement choisi. Veuillez sélectionner un autre mode de livraison.",
-      "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible."
+      "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible.",
+      "pickupTimeRequired": "Veuillez choisir une heure de retrait avant de passer votre commande."
     }
   },
   "error": {
     "kmh-click-and-pick": {
       "pickupLocationRequired": "Veuillez sélectionner un lieu de retrait valide avant de passer votre commande.",
       "unsupportedDeliveryMethod": "Le mode de livraison sélectionné « \"%deliveryMethodName%\" » n'est pas pris en charge pour le mode de paiement choisi. Veuillez sélectionner un autre mode de livraison.",
-      "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible."
+      "invalidPickupTime": "L'heure de retrait sélectionnée est en dehors des heures d'ouverture du lieu de retrait. Veuillez choisir une heure disponible.",
+      "pickupTimeRequired": "Veuillez choisir une heure de retrait avant de passer votre commande."
     }
   },
   "general": {
@@ -34,6 +36,10 @@
         "email": "E-mail",
         "pickupTime": "Heure de retrait",
         "pickupComment": "Remarques"
+      },
+      "pickupLocationField": {
+        "label": "Choisir le lieu de retrait",
+        "placeholder": "Veuillez sélectionner"
       },
       "pickupTimeField": {
         "dateLabel": "Date de retrait",
