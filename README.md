@@ -4,6 +4,13 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/KommandHub/KommandhubClickAndPickSW/actions/workflows/php.yml"><img src="https://github.com/KommandHub/KommandhubClickAndPickSW/actions/workflows/php.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/Shopware-6.7-189EFF" alt="Shopware 6.7">
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-777BB4" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/license-proprietary-red" alt="License: proprietary">
+</p>
+
 # Click and Pick for Shopware 6
 
 Click and collect for Shopware 6.7. Customers choose a store or collection point at checkout, pick a date and a time slot within its opening hours, and collect the order themselves — optionally paying at the counter.
