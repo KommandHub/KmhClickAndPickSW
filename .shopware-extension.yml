@@ -1,0 +1,15 @@
+# shopware-cli extension configuration.
+#
+# This plugin targets Shopware ~6.7.0 (see composer.json). shopware-cli validates
+# against the latest core, so it reports 6.8 *future* deprecations and internal-API
+# notes that do not apply on 6.7. They are ignored here until the plugin moves its
+# minimum to 6.8; remove these entries as part of that upgrade.
+validation:
+  ignore:
+    # EntitySearchResult stops extending EntityCollection in 6.8; first()/getEntities()
+    # are still correct on 6.7. Revisit when raising the minimum to 6.8.
+    - identifier: phpstan/method.deprecatedClass
+      message: "class Shopware\\Core\\Framework\\DataAbstractionLayer\\Search\\EntitySearchResult"
+    # Payment handlers extend DefaultPayment on the 6.7 payment API.
+    - identifier: phpstan/shopware.internalClassExtends
+      message: "PayOnPickupPaymentHandler extends internal class"

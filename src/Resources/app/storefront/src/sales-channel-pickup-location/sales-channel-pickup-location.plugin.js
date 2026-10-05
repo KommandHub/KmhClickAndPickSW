@@ -149,7 +149,7 @@ export default class SalesChannelPickupLocationPlugin extends PluginBaseClass {
         };
 
         const httpClient = new window.HttpClient();
-        httpClient.post('/checkout/configure', JSON.stringify(data), (response) => {
+        httpClient.post('/checkout/configure', JSON.stringify(data), () => {
             // After successful persistence, reload the page to refresh the cart
             // and the shipping form (e.g. to show time slots for the new location).
             window.location.reload();

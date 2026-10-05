@@ -1,4 +1,14 @@
-# Unreleased
+# 0.10.0
+
+## Added
+- Nearest-first pickup locations: with the optional *Pickup location by distance*
+  cookie consent accepted, a **Use my location** button in checkout reorders the
+  location list by great-circle distance to the customer's approximate position;
+  locations without coordinates stay last. Opt-in per sales channel via the
+  *Enable geolocation sorting* setting (on by default). The position is rounded to
+  ~1 km, used only for ordering, and never stored.
+- Per-location **Default Sales Channel** so the channel's default pickup location
+  can be chosen when customer selection is turned off.
 
 ## Fixed
 - Opening an order in the Administration no longer deletes its pickup details.

@@ -25,6 +25,7 @@
     },
     "general": {
       "title": "Abholorte",
+      "placeholderSearchBar": "Abholorte suchen...",
       "mainMenuItemGeneral": "Abholorte",
       "mainMenuItemGeneralDescription": "Verwalten Sie Ihre Abholorte",
       "deleteWarning": "Warnung",

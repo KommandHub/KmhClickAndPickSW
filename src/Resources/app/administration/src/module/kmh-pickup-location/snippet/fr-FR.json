@@ -25,6 +25,7 @@
     },
     "general": {
       "title": "Points de retrait",
+      "placeholderSearchBar": "Rechercher des points de retrait...",
       "mainMenuItemGeneral": "Points de retrait",
       "mainMenuItemGeneralDescription": "Gérez vos points de retrait",
       "deleteWarning": "Avertissement",

@@ -15,6 +15,8 @@ class OrderPickupLocationEntity extends Entity
 
     protected string $orderId;
 
+    protected string $orderVersionId;
+
     protected ?string $pickupLocationId = null;
 
     protected ?\DateTimeInterface $pickupTime = null;
@@ -33,6 +35,16 @@ class OrderPickupLocationEntity extends Entity
     public function setOrderId(string $orderId): void
     {
         $this->orderId = $orderId;
+    }
+
+    public function getOrderVersionId(): string
+    {
+        return $this->orderVersionId;
+    }
+
+    public function setOrderVersionId(string $orderVersionId): void
+    {
+        $this->orderVersionId = $orderVersionId;
     }
 
     public function getPickupLocationId(): ?string

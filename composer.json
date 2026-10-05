@@ -2,7 +2,7 @@
     "name": "kommandhub/click-and-pick-sw",
     "description": "Click and collect for Shopware 6: pickup-location selection in checkout, a self-pickup shipping method and a pay-on-pickup payment method, with pickup-ready order state and mail automation.",
     "type": "shopware-platform-plugin",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "license": "proprietary",
     "keywords": [
         "shopware",
